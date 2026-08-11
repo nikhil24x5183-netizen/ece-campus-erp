@@ -1,0 +1,174 @@
+/* Official College Timetable CSS Layout - Clean White Theme matching Uploaded Timetable Image */
+
+.timetable-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-main);
+}
+
+.timetable-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.timetable-header-info h2 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.timetable-grid {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+.timetable-grid th,
+.timetable-grid td {
+  border: 1px solid #cbd5e1;
+  text-align: center;
+  padding: 0.6rem;
+  vertical-align: middle;
+  font-size: 0.85rem;
+}
+
+.timetable-grid th {
+  background: #dbeafe;
+  color: #1e3a8a;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.day-header-cell {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  font-weight: 800 !important;
+  width: 70px;
+}
+
+.div-header-cell {
+  background: #f8fafc !important;
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+  width: 110px;
+}
+
+/* Break Column Styling */
+td.cell-break {
+  background: #e2e8f0 !important;
+  color: #475569 !important;
+  font-weight: 800;
+  writing-mode: vertical-lr;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.82rem;
+  padding: 1rem 0.4rem;
+}
+
+/* Cell Timetable Card */
+.tt-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 0.45rem;
+  margin-bottom: 0.35rem;
+  transition: var(--transition);
+  cursor: pointer;
+  text-align: left;
+}
+
+.tt-card:last-child {
+  margin-bottom: 0;
+}
+
+.tt-card:hover {
+  background: #eff6ff;
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* Yellow Highlighted Cells matching timetable image */
+.tt-card.highlight-yellow {
+  background: #fef08a !important;
+  border-color: #eab308 !important;
+}
+
+.tt-subject {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tt-code {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: #eff6ff;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.tt-batch-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #1e40af;
+  background: #dbeafe;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+}
+
+.tt-meta {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+/* Printable Timetable Clean Layout */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .sidebar, .top-navbar, .btn {
+    display: none !important;
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  .timetable-container {
+    background: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .timetable-grid th, .timetable-grid td {
+    border: 1px solid #000 !important;
+    color: #000 !important;
+  }
+  .tt-card {
+    background: #fff !important;
+    border: 1px solid #000 !important;
+    color: #000 !important;
+  }
+}
