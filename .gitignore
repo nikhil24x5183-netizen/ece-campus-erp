@@ -8,6 +8,7 @@ node_modules/
 deploy_vercel.py
 disable_vercel_protection.py
 get_vercel_logs.py
+shreyash/
 *.py
 !app.py
 !api/index.py
