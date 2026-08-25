@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./static/manifest.json">
+  <title>ECE Management — Student Activity, Certificate & Timetable System</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- SheetJS Excel Library -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Supabase JS Client Library for Auth, PostgreSQL & Storage -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Identity Services (GSI) — deferred, only needed for optional Google login -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Clerk Auth JS SDK — deferred, only needed for optional OAuth integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" defer></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="./static/css/main.css?v=185">
+  <link rel="stylesheet" href="./static/css/timetable.css?v=185">
+</head>
+<body>
+  <!-- Mobile Backdrop Overlay -->
+  <div class="mobile-overlay-backdrop" id="mobile-backdrop"></div>
+
+  <div id="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="app-sidebar" style="display: none;">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div class="brand-text">
+          <h2>ECE Management</h2>
+          <span>Student & Activity Portal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Navigation items injected dynamically by role -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="user-avatar-initials">U</div>
+          <div class="user-details">
+            <h4 id="user-display-name">Loading...</h4>
+            <span id="user-display-role">ROLE</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navbar -->
+      <header class="top-navbar" id="app-navbar" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <button class="mobile-hamburger" id="btn-mobile-menu-toggle" title="Toggle Mobile Navigation Drawer">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-sidebar-collapse" onclick="App.toggleSidebarCollapsed()" title="Toggle Sidebar Collapse (Full Width View)" style="border-radius: var(--radius-full); padding: 0.35rem 0.65rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <i class="fa-solid fa-ellipsis-vertical" id="icon-sidebar-collapse" style="font-size: 1.1rem; color: var(--primary);"></i>
+            <span class="btn-text" style="font-size: 0.72rem; text-transform: uppercase;">Sidebar</span>
+          </button>
+          <div class="page-title" id="page-title">Dashboard</div>
+        </div>
+        <div class="navbar-actions">
+          <button class="btn btn-primary btn-sm" id="btn-universal-edit-profile-nav" onclick="App.openEditProfileModal()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; font-weight: 800; border: none; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);">
+            <i class="fa-solid fa-user-pen"></i> <span class="btn-text">Edit Profile</span>
+          </button>
+          <span class="badge-role" id="navbar-role-badge">HOD</span>
+          <button class="btn btn-secondary btn-sm" id="btn-notifications-toggle">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> <span class="btn-text">Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Injection Container -->
+      <div id="view-container">
+        <!-- Views rendered here dynamically -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Shared Modals -->
+  <!-- 1. File Preview Modal -->
+  <div class="modal-overlay" id="modal-file-preview">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3 id="preview-modal-title">Certificate Document Preview</h3>
+        <button class="modal-close" onclick="closeModal('modal-file-preview')">&times;</button>
+      </div>
+      <div id="preview-modal-body" style="min-height: 350px; display: block;">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Rejection Reason Modal -->
+  <div class="modal-overlay" id="modal-reject-reason">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Reject Certificate</h3>
+        <button class="modal-close" onclick="closeModal('modal-reject-reason')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>Reason for Rejection <span style="color: var(--accent-rose);">*</span></label>
+        <textarea id="reject-reason-input" class="form-control" rows="4" placeholder="Enter reason for rejecting this certificate submission..."></textarea>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn btn-secondary" onclick="closeModal('modal-reject-reason')">Cancel</button>
+        <button class="btn btn-danger" id="btn-confirm-reject">Reject Certificate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. HOD Lecture Selection Approval Modal -->
+  <div class="modal-overlay" id="modal-approve-lectures">
+    <div class="modal-content" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-square-check" style="color: var(--primary);"></i> HOD Approve Certificate — Select Lectures</h3>
+        <button class="modal-close" onclick="closeModal('modal-approve-lectures')">&times;</button>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <p style="font-size: 0.9rem; color: var(--text-muted);" id="approve-modal-subtitle">
+          Student: NIKHIL | Date: 2026-08-11 (Tuesday) — Select lectures to mark attendance:
+        </p>
+      </div>
+
+      <div id="approve-lectures-list" style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 380px; overflow-y: auto; margin-bottom: 1.5rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: #ffffff;">
+        <!-- Checkboxes injected dynamically -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.88rem; font-weight: 700; color: #2563eb;">
+          <input type="checkbox" id="chk-select-all-lectures" checked onchange="TeacherView.toggleSelectAllLectures(this.checked)" style="width: 17px; height: 17px; accent-color: #2563eb;"> Select All Lectures
+        </label>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-secondary" onclick="closeModal('modal-approve-lectures')">CANCEL</button>
+          <button class="btn btn-success" id="btn-confirm-approve-lectures" style="background: #16a34a; border-color: #16a34a; font-weight: 700;"><i class="fa-solid fa-check"></i> CONFIRM HOD APPROVAL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Timetable Cell Add/Edit Modal -->
+  <div class="modal-overlay" id="modal-timetable-edit">
+    <div class="modal-content" style="max-width: 550px;">
+      <div class="modal-header">
+        <h3 id="tt-modal-title">Add / Edit Timetable Entry</h3>
+        <button class="modal-close" onclick="closeModal('modal-timetable-edit')">&times;</button>
+      </div>
+      <form id="form-timetable-entry">
+        <input type="hidden" id="tt-entry-id">
+        <div class="form-group">
+          <label>Day of Week</label>
+          <select id="tt-day" class="form-control" required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Time Slot</label>
+          <select id="tt-slot" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Activity Type</label>
+          <select id="tt-activity-type" class="form-control" required>
+            <option value="THEORY">THEORY</option>
+            <option value="LAB">LAB</option>
+            <option value="TUTORIAL">TUTORIAL</option>
+            <option value="LIBRARY">LIBRARY</option>
+            <option value="BREAK">BREAK</option>
+            <option value="FREE_PERIOD">FREE_PERIOD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="tt-subject" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Batch (Select None for Division-Wide)</label>
+          <select id="tt-batch" class="form-control">
+            <option value="">All Division (Whole Class)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Teacher</label>
+          <select id="tt-teacher" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Room / Lab Number</label>
+          <input type="text" id="tt-room" class="form-control" placeholder="e.g. Room 105, Lab 201">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-danger btn-sm" id="btn-delete-tt" style="display: none;">Delete Entry</button>
+          <div style="display: flex; gap: 0.75rem; margin-left: auto;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-timetable-edit')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Entry</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. HOD / Faculty Account Security & Settings Modal -->
+  <div class="modal-overlay" id="modal-hod-change-password">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Account Security & Settings</h3>
+        <button class="modal-close" onclick="closeModal('modal-hod-change-password')">&times;</button>
+      </div>
+      <form id="form-hod-change-password" onsubmit="HodView.handleChangePassword(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Update your login email address, private password, and 4-digit Security PIN.
+        </p>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Login Email Address <span style="color: var(--accent-rose);">*</span></label>
+          <input type="email" id="hod-email-input" class="form-control" placeholder="e.g. teacher@campus.edu" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label>Current Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="hod-current-password" class="form-control" placeholder="Enter Current Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('hod-current-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>New Secret Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="hod-new-password" class="form-control" placeholder="Enter New Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('hod-new-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm New Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="hod-confirm-password" class="form-control" placeholder="Confirm New Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('hod-confirm-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>4-Digit Security PIN <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="hod-new-pin" class="form-control" placeholder="Enter 4-Digit Security PIN" maxlength="6" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('hod-new-pin', this)" title="Show/Hide PIN">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-hod-change-password')">Cancel</button>
+          <button type="submit" id="btn-submit-hod-change-pass" class="btn btn-primary">
+            <i class="fa-solid fa-shield-halved"></i> Save Account Settings
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. HOD Security PIN Lock Modal -->
+  <div class="modal-overlay" id="modal-hod-pin-lock" style="z-index: 9999;">
+    <div class="modal-content" style="max-width: 440px; text-align: center; border-radius: 20px; padding: 2.25rem;">
+      <div style="width: 72px; height: 72px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; font-size: 2.2rem; color: var(--primary);">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem;">
+        HOD Security Desk Verification
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        Enter your 4-digit HOD Security PIN to unlock the management portal:
+      </p>
+
+      <form id="form-hod-pin-verify" onsubmit="verifyHodPin(event)">
+        <div class="form-group" style="max-width: 260px; margin: 0 auto 1.5rem auto;">
+          <div class="password-toggle-group">
+            <input type="password" id="input-hod-security-pin" class="form-control" placeholder="Enter Security PIN" maxlength="6" required autocomplete="new-password" value="" style="font-size: 1.1rem; text-align: center; padding-right: 2.75rem !important;">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('input-hod-security-pin', this)" title="Show/Hide PIN">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-verify-hod-pin" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 0.95rem; font-weight: 800;">
+          <i class="fa-solid fa-lock-open"></i> Unlock HOD Desk
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. Student Account Security & Settings Modal -->
+  <div class="modal-overlay" id="modal-student-change-settings">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-gear" style="color: var(--primary);"></i> Student Account Security & Settings</h3>
+        <button class="modal-close" onclick="closeModal('modal-student-change-settings')">&times;</button>
+      </div>
+      <form id="form-student-change-settings" onsubmit="StudentView.handleChangeSettings(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Update your login email address and private account password.
+        </p>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Login Email Address <span style="color: var(--accent-rose);">*</span></label>
+          <input type="email" id="student-email-input" class="form-control" placeholder="e.g. student@campus.edu" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label>Current Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="student-current-password" class="form-control" placeholder="Enter Current Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('student-current-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>New Secret Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="student-new-password" class="form-control" placeholder="Enter New Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('student-new-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm New Password <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="student-confirm-password" class="form-control" placeholder="Confirm New Password" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('student-confirm-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-student-change-settings')">Cancel</button>
+          <button type="submit" id="btn-submit-student-change-settings" class="btn btn-primary">
+            <i class="fa-solid fa-shield-halved"></i> Save Account Settings
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Universal Edit Profile Modal for ALL Roles (Student, Teacher, HOD/Admin) -->
+  <div class="modal-overlay" id="modal-universal-edit-profile">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-pen" style="color: var(--primary);"></i> Edit Profile Details</h3>
+        <button class="modal-close" onclick="closeModal('modal-universal-edit-profile')">&times;</button>
+      </div>
+      <form id="form-universal-edit-profile" onsubmit="App.handleSaveEditProfile(event)">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Update your profile information, email address, and account credentials.
+        </p>
+
+        <div id="edit-profile-student-lock-notice" style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-md); padding: 0.65rem 0.85rem; margin-bottom: 1rem; font-size: 0.8rem; color: #1e40af;">
+          <i class="fa-solid fa-lock" style="color: var(--primary);"></i> <strong>Official Roster Lock:</strong> Full Name, Roll No, PRN, Division & Batch are locked by HOD. You can update your <strong>Email Address</strong> and <strong>Password</strong>.
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-user" style="color: var(--primary);"></i> Full Name <span style="color: var(--accent-rose);">*</span></label>
+          <input type="text" id="edit-profile-name" class="form-control" placeholder="Enter full name" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Email Address <span style="color: var(--accent-rose);">*</span></label>
+          <input type="email" id="edit-profile-email" class="form-control" placeholder="Enter email address" required autocomplete="email">
+        </div>
+
+        <!-- Student-Specific Fields (auto-toggled for STUDENT role) -->
+        <div id="edit-profile-student-fields" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label>Roll Number</label>
+              <input type="text" id="edit-profile-roll" class="form-control" placeholder="e.g. 21">
+            </div>
+            <div class="form-group">
+              <label>PRN Number</label>
+              <input type="text" id="edit-profile-prn" class="form-control" placeholder="e.g. 52662233JJ">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label>Division</label>
+              <select id="edit-profile-div" class="form-control">
+                <option value="1">SE(ECE)-A</option>
+                <option value="2">SE(ECE)-B</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Batch</label>
+              <select id="edit-profile-batch" class="form-control">
+                <option value="1">Batch A1</option>
+                <option value="2">Batch A2</option>
+                <option value="3">Batch A3</option>
+                <option value="4">Batch B1</option>
+                <option value="5">Batch B2</option>
+                <option value="6">Batch B3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-lock" style="color: var(--primary);"></i> New Password (leave blank to keep current)</label>
+          <div class="password-toggle-group">
+            <input type="password" id="edit-profile-new-password" class="form-control" placeholder="Enter new password" autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('edit-profile-new-password', this)" title="Show/Hide Password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-universal-edit-profile')">Cancel</button>
+          <button type="submit" id="btn-submit-edit-profile" class="btn btn-primary" style="background: #16a34a; border-color: #16a34a; font-weight: 800;">
+            <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mandatory First-Time Student Login Credentials Setup Modal -->
+  <div class="modal-overlay" id="modal-first-login-setup" style="z-index: 99999;">
+    <div class="modal-content" style="max-width: 540px; border-radius: var(--radius-lg); border: 2px solid var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.35);">
+      <div style="text-align: center; margin-bottom: 1.25rem;">
+        <div style="width: 60px; height: 60px; background: #eff6ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto; font-size: 1.75rem;">
+          <i class="fa-solid fa-id-card-clip"></i>
+        </div>
+        <h3 style="font-family: var(--font-heading); font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem; font-size: 1.35rem;">
+          Welcome! Activate Your Student Account
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+          Your name is pre-registered on the official department roster. Please enter your personal email, real PRN number, and set a new password to activate your portal.
+        </p>
+      </div>
+
+      <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
+        <i class="fa-solid fa-shield-halved" style="color: #d97706; font-size: 1.25rem;"></i>
+        <div style="font-size: 0.82rem; color: #92400e;">
+          <strong>Official Roster Identity:</strong>
+          <div id="first-login-roster-info" style="font-weight: 800; color: var(--text-main); margin-top: 0.15rem;"></div>
+        </div>
+      </div>
+
+      <form id="form-first-login-setup">
+        <div class="form-group">
+          <label><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Personal Email Address <span style="color: var(--accent-rose);">*</span></label>
+          <input type="email" id="first-login-email" class="form-control" placeholder="e.g. yourname@gmail.com" required autocomplete="email">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">This will be your permanent login email.</span>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-fingerprint" style="color: var(--primary);"></i> Official PRN Number <span style="color: var(--accent-rose);">*</span></label>
+          <input type="text" id="first-login-prn" class="form-control" placeholder="e.g. U251H007" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label><i class="fa-solid fa-lock" style="color: var(--primary);"></i> New Password <span style="color: var(--accent-rose);">*</span></label>
+            <div class="password-toggle-group">
+              <input type="password" id="first-login-password" class="form-control" placeholder="Min 6 characters" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('first-login-password', this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa-solid fa-check-double" style="color: var(--primary);"></i> Confirm Password <span style="color: var(--accent-rose);">*</span></label>
+            <div class="password-toggle-group">
+              <input type="password" id="first-login-confirm-password" class="form-control" placeholder="Re-enter password" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('first-login-confirm-password', this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <button type="submit" id="btn-submit-first-login" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);">
+            <i class="fa-solid fa-rocket"></i> Activate My Account & Open Dashboard
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- HOD / ADMIN STUDENT CERTIFICATE RECOVERY & RE-UPLOAD MODAL -->
+  <div class="modal-overlay" id="modal-hod-recovery">
+    <div class="modal-content" style="max-width: 750px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="border-bottom: 2px solid #d97706; padding-bottom: 0.75rem;">
+        <h3 style="color: #b45309; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+          <i class="fa-solid fa-file-shield" style="color: #d97706;"></i> Student Certificate Recovery & Re-Upload
+        </h3>
+        <button class="modal-close" onclick="closeModal('modal-hod-recovery')">&times;</button>
+      </div>
+
+      <div style="padding: 1.25rem 0;">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
+          Search for a student strictly by <strong>Name</strong> to verify their backend submission status and safely re-upload or restore their hackathon/achievement certificate.
+        </p>
+
+        <!-- STEP 1: SEARCH BY NAME ONLY -->
+        <div id="recovery-step-search" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+          <label style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> Search Student by Full Name or First Name:
+          </label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="recovery-search-name-input" class="form-control" placeholder="e.g. Aniket, Nikhil, Sneha, Pisale..." onkeydown="if(event.key==='Enter'){event.preventDefault();HodView.searchStudentForRecovery();}">
+            <button type="button" class="btn btn-primary" onclick="HodView.searchStudentForRecovery()" style="white-space: nowrap; font-weight: 800; padding: 0.6rem 1.5rem;">
+              <i class="fa-solid fa-search"></i> Search
+            </button>
+          </div>
+          <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 0.4rem;">
+            Tip: If multiple students have the same name, you will be prompted to choose the exact student based on their Division & Roll Number.
+          </small>
+        </div>
+
+        <!-- STEP 2: DISAMBIGUATION / SEARCH RESULTS LIST -->
+        <div id="recovery-search-results" style="display: none; margin-bottom: 1.5rem;"></div>
+
+        <!-- STEP 3: RECOVERY / RE-UPLOAD FORM (Appears after student selection) -->
+        <div id="recovery-upload-panel" style="display: none;">
+          <!-- Selected Student Profile Card -->
+          <div id="recovery-selected-student-banner" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.25rem;"></div>
+
+          <!-- Existing Submission Alert (if any) -->
+          <div id="recovery-existing-submission-alert" style="display: none; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;"></div>
+
+          <!-- Re-Upload Form -->
+          <form id="form-hod-recovery-upload" onsubmit="HodView.handleRecoveryUpload(event)">
+            <input type="hidden" id="recovery-target-student-id">
+            <input type="hidden" id="recovery-replace-cert-id">
+
+            <div class="form-group">
+              <label>Certificate Title <span style="color: var(--accent-rose);">*</span></label>
+              <input type="text" id="recovery-cert-title" class="form-control" placeholder="e.g. 1st Prize in National Hackathon 2026" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label>Event Name / Organizer <span style="color: var(--accent-rose);">*</span></label>
+                <input type="text" id="recovery-cert-event" class="form-control" placeholder="e.g. Smart India Hackathon 2026" required>
+              </div>
+
+              <div class="form-group">
+                <label>Category <span style="color: var(--accent-rose);">*</span></label>
+                <select id="recovery-cert-category" class="form-control" required>
+                  <option value="Hackathon">Hackathon</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Seminar">Seminar</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Cultural">Cultural</option>
+                  <option value="Publication">Paper Publication</option>
+                  <option value="NPTEL/Coursera">NPTEL / Online Certification</option>
+                  <option value="Other">Other Co-Curricular</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Certificate Event Date <span style="color: var(--accent-rose);">*</span></label>
+              <input type="date" id="recovery-cert-date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label>Description / Role / Summary</label>
+              <textarea id="recovery-cert-desc" class="form-control" rows="2" placeholder="Brief details about the project, hackathon problem statement, or achievement..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Upload Document File (PDF / PNG / JPG) <span style="color: var(--accent-rose);">*</span></label>
+              <input type="file" id="recovery-cert-file" class="form-control" accept="image/*,application/pdf,.pdf,.png,.jpg,.jpeg" style="padding: 0.6rem; border: 2px dashed #d97706; background: #fffbeb; cursor: pointer; border-radius: var(--radius-md);" onchange="HodView.onRecoveryFileSelected(this)">
+              <small id="recovery-file-status" style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 0.3rem;">Choose the certificate document from your computer/device.</small>
+            </div>
+
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+              <label style="display: flex; align-items: center; gap: 0.6rem; margin: 0; cursor: pointer; font-size: 0.9rem; font-weight: 700; color: #166534;">
+                <input type="checkbox" id="recovery-auto-approve-checkbox" checked style="width: 18px; height: 18px; accent-color: #16a34a;">
+                <span>Automatically Approve and Grant Attendance Compensation</span>
+              </label>
+              <small style="color: #15803d; font-size: 0.78rem; display: block; margin-top: 0.25rem; margin-left: 1.75rem;">
+                Safeguard active: duplicate attendance records will never be created if attendance was already granted.
+              </small>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+              <button type="button" class="btn btn-secondary" onclick="HodView.cancelRecoverySelection()">
+                <i class="fa-solid fa-arrow-left"></i> Change Student
+              </button>
+              <button type="submit" id="btn-submit-recovery-upload" class="btn btn-primary" style="background: linear-gradient(135deg, #d97706, #b45309); border-color: #b45309; font-weight: 800; padding: 0.75rem 2rem;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Restore & Upload Certificate
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+    <!-- Google Firebase Realtime Database SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
+  <!-- JavaScript Modules with Cache Buster v=4400 -->
+  <script src="./static/js/api.js?v=4400"></script>
+  <script src="./static/js/utils/toast.js?v=4400"></script>
+  <script src="./static/js/utils/exporter.js?v=4400"></script>
+  <script src="./static/js/views/auth.js?v=4400"></script>
+  <script src="./static/js/views/student.js?v=4400"></script>
+  <script src="./static/js/views/teacher.js?v=4400"></script>
+  <script src="./static/js/views/hod.js?v=4400"></script>
+  <script src="./static/js/views/timetable.js?v=4400"></script>
+  <script src="./static/js/views/reports.js?v=4400"></script>
+  <script src="./static/js/app.js?v=4400"></script>
+</body>
+</html>

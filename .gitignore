@@ -1,0 +1,14 @@
+.vercel
+.env*
+__pycache__/
+*.pyc
+*.log
+campus_erp.db
+node_modules/
+deploy_vercel.py
+disable_vercel_protection.py
+get_vercel_logs.py
+*.py
+!app.py
+!api/index.py
+!database.py
