@@ -34,7 +34,7 @@ const INITIAL_DB = {
   users: [
   {
     "id": 1,
-    "email": "teacher@campus.edu",
+    "email": "dhanashree.kulkarni@nmiet.edu.in",
     "password_hash": "1234",
     "role": "HOD",
     "name": "Dr. Dhanashree Kulkarni",
@@ -4749,7 +4749,7 @@ const INITIAL_DB = {
   audit_logs: [],
   hod_pin: "1234",
   teachers: [
-    { id: 1, user_id: 1, name: "Dr. Dhanashree Kulkarni", email: "teacher@campus.edu", teacher_id_code: "HOD101", department_id: 1, designation: "Head of Department" },
+    { id: 1, user_id: 1, name: "Dr. Dhanashree Kulkarni", email: "dhanashree.kulkarni@nmiet.edu.in", teacher_id_code: "HOD101", department_id: 1, designation: "Head of Department" },
     { id: 2, user_id: 2, name: "Dr. Sagar Shinde", email: "sagar.shinde@campus.edu", teacher_id_code: "T102", department_id: 1, designation: "Professor" },
     { id: 3, user_id: 3, name: "Dr. Priyanka Patil", email: "priyanka.patil@campus.edu", teacher_id_code: "T103", department_id: 1, designation: "Associate Professor" },
     { id: 4, user_id: 4, name: "Ms. Dhanashree Dixit", email: "dhanashree.dixit@campus.edu", teacher_id_code: "T104", department_id: 1, designation: "Assistant Professor" },
@@ -6057,7 +6057,7 @@ const API = {
       const portal = (body.portal || 'DIV_A').toUpperCase();
 
       let user = null;
-      if (email === 'hod' || email === 'admin') {
+      if (email === 'hod' || email === 'admin' || email === 'teacher' || email === 'teacher@campus.edu' || email === 'hod@campus.edu' || email === 'dhanashree.kulkarni@nmiet.edu.in' || email.includes('dhanashree.kulkarni')) {
         user = (db.users || []).find(u => u.role === 'HOD') || db.users[0];
       }
 
