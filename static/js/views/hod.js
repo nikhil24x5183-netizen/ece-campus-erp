@@ -10,8 +10,6 @@ const HodView = {
       const rows = teachers.map(t => `
         <tr>
           <td><strong style="color: var(--text-main); font-size: 0.95rem;">${t.name}</strong></td>
-          <td><span style="font-family: monospace; font-weight: 700; color: var(--primary);">${t.teacher_id_code}</span></td>
-          <td>${t.email}</td>
           <td><span class="badge-role role-TEACHER">${t.designation || 'Faculty'}</span></td>
           <td><span class="badge-status status-APPROVED">ACTIVE</span></td>
           <td>
@@ -20,7 +18,7 @@ const HodView = {
             </button>
           </td>
         </tr>
-      `).join('') || `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No faculty members registered yet.</td></tr>`;
+      `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No faculty members registered yet.</td></tr>`;
 
       return `
         <div class="dashboard-container">
@@ -41,8 +39,6 @@ const HodView = {
                 <thead>
                   <tr>
                     <th>Faculty Name</th>
-                    <th>Teacher ID Code</th>
-                    <th>Email Address</th>
                     <th>Designation</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -69,25 +65,13 @@ const HodView = {
                 <input type="text" id="add-teacher-name" class="form-control" placeholder="e.g. Prof. R. K. Joshi" required>
               </div>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                  <label>Teacher ID Code <span style="color: var(--accent-rose);">*</span></label>
-                  <input type="text" id="add-teacher-code" class="form-control" placeholder="e.g. T103" required>
-                </div>
-
-                <div class="form-group">
-                  <label>Designation <span style="color: var(--accent-rose);">*</span></label>
-                  <select id="add-teacher-designation" class="form-control" required>
-                    <option value="Assistant Professor">Assistant Professor</option>
-                    <option value="Associate Professor">Associate Professor</option>
-                    <option value="Professor">Professor</option>
-                  </select>
-                </div>
-              </div>
-
               <div class="form-group">
-                <label>Faculty Email Address <span style="color: var(--accent-rose);">*</span></label>
-                <input type="email" id="add-teacher-email" class="form-control" placeholder="e.g. rkjoshi@campus.edu" required>
+                <label>Designation <span style="color: var(--accent-rose);">*</span></label>
+                <select id="add-teacher-designation" class="form-control" required>
+                  <option value="Assistant Professor">Assistant Professor</option>
+                  <option value="Associate Professor">Associate Professor</option>
+                  <option value="Professor">Professor</option>
+                </select>
               </div>
 
               <div class="form-group">
@@ -119,12 +103,19 @@ const HodView = {
     btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Registering...';
     btnSubmit.disabled = true;
 
+    const nameVal = (document.getElementById('add-teacher-name').value || '').trim();
+    const desigVal = document.getElementById('add-teacher-designation').value;
+    const passVal = (document.getElementById('add-teacher-password').value || '').trim();
+
+    const autoCode = 'T' + Math.floor(100 + Math.random() * 900);
+    const autoEmail = nameVal.toLowerCase().replace(/[^a-z0-9]/g, '.') + '@campus.edu';
+
     const payload = {
-      name: document.getElementById('add-teacher-name').value,
-      teacher_id_code: document.getElementById('add-teacher-code').value,
-      designation: document.getElementById('add-teacher-designation').value,
-      email: document.getElementById('add-teacher-email').value,
-      password: document.getElementById('add-teacher-password').value
+      name: nameVal,
+      teacher_id_code: autoCode,
+      designation: desigVal,
+      email: autoEmail,
+      password: passVal
     };
 
     try {
