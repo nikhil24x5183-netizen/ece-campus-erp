@@ -735,7 +735,7 @@ const App = {
     const elPass = document.getElementById('edit-profile-new-password');
 
     if (elName) {
-      elName.value = (student ? student.name : user.name) || '';
+      elName.value = (isStudent && student ? student.name : user.name) || '';
       elName.readOnly = isStudent;
       elName.style.background = isStudent ? '#f1f5f9' : '';
       elName.style.cursor = isStudent ? 'not-allowed' : '';
@@ -745,7 +745,7 @@ const App = {
 
     const studentFields = document.getElementById('edit-profile-student-fields');
     if (studentFields) {
-      if (isStudent || student) {
+      if (isStudent) {
         studentFields.style.display = 'block';
         const elRoll = document.getElementById('edit-profile-roll');
         const elPrn = document.getElementById('edit-profile-prn');
@@ -754,27 +754,27 @@ const App = {
 
         if (elRoll) {
           elRoll.value = student ? (student.roll_no || '') : '';
-          elRoll.readOnly = isStudent;
-          elRoll.style.background = isStudent ? '#f1f5f9' : '';
-          elRoll.style.cursor = isStudent ? 'not-allowed' : '';
+          elRoll.readOnly = true;
+          elRoll.style.background = '#f1f5f9';
+          elRoll.style.cursor = 'not-allowed';
         }
         if (elPrn) {
           elPrn.value = student ? (student.prn_no || '') : '';
-          elPrn.readOnly = isStudent;
-          elPrn.style.background = isStudent ? '#f1f5f9' : '';
-          elPrn.style.cursor = isStudent ? 'not-allowed' : '';
+          elPrn.readOnly = true;
+          elPrn.style.background = '#f1f5f9';
+          elPrn.style.cursor = 'not-allowed';
         }
         if (elDiv) {
           elDiv.value = student ? (student.division_id || 1) : 1;
-          elDiv.disabled = isStudent;
-          elDiv.style.background = isStudent ? '#f1f5f9' : '';
-          elDiv.style.cursor = isStudent ? 'not-allowed' : '';
+          elDiv.disabled = true;
+          elDiv.style.background = '#f1f5f9';
+          elDiv.style.cursor = 'not-allowed';
         }
         if (elBatch) {
           elBatch.value = student ? (student.batch_id || 1) : 1;
-          elBatch.disabled = isStudent;
-          elBatch.style.background = isStudent ? '#f1f5f9' : '';
-          elBatch.style.cursor = isStudent ? 'not-allowed' : '';
+          elBatch.disabled = true;
+          elBatch.style.background = '#f1f5f9';
+          elBatch.style.cursor = 'not-allowed';
         }
       } else {
         studentFields.style.display = 'none';
