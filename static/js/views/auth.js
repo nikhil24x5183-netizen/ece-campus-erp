@@ -78,8 +78,8 @@ const AuthView = {
 
           <form id="form-login" onsubmit="AuthView.handleLogin(event)">
             <div class="form-group">
-              <label><i class="fa-solid fa-user-tag" style="color: var(--primary);"></i> PRN Number / Username / Roll No</label>
-              <input type="text" id="login-email" class="form-control" placeholder="e.g. U251H001, U251H007, or your Username" required value="">
+              <label><i class="fa-solid fa-user-tag" style="color: var(--primary);"></i> PRN Number / Registered Email</label>
+              <input type="text" id="login-email" class="form-control" placeholder="e.g. U251H001, U251H007, or registered email" required value="">
             </div>
 
             <div class="form-group">
