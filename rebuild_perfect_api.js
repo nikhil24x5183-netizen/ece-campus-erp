@@ -141,10 +141,60 @@ const users = [
   },
   {
     id: 2,
-    email: "faculty@campus.edu",
+    email: "sagar.shinde@campus.edu",
     password_hash: "1234",
     role: "TEACHER",
-    name: "Prof. A. R. Sharma",
+    name: "Dr. Sagar Shinde",
+    status: "APPROVED",
+    is_activated: true,
+    must_change_credentials: false
+  },
+  {
+    id: 3,
+    email: "priyanka.patil@campus.edu",
+    password_hash: "1234",
+    role: "TEACHER",
+    name: "Dr. Priyanka Patil",
+    status: "APPROVED",
+    is_activated: true,
+    must_change_credentials: false
+  },
+  {
+    id: 4,
+    email: "dhanashree.dixit@campus.edu",
+    password_hash: "1234",
+    role: "TEACHER",
+    name: "Ms. Dhanashree Dixit",
+    status: "APPROVED",
+    is_activated: true,
+    must_change_credentials: false
+  },
+  {
+    id: 5,
+    email: "muktai.surnar@campus.edu",
+    password_hash: "1234",
+    role: "TEACHER",
+    name: "Ms. Muktai Surnar",
+    status: "APPROVED",
+    is_activated: true,
+    must_change_credentials: false
+  },
+  {
+    id: 6,
+    email: "vikas.t@campus.edu",
+    password_hash: "1234",
+    role: "TEACHER",
+    name: "Mr. Vikas T.",
+    status: "APPROVED",
+    is_activated: true,
+    must_change_credentials: false
+  },
+  {
+    id: 7,
+    email: "sujata.gaikwad@campus.edu",
+    password_hash: "1234",
+    role: "TEACHER",
+    name: "Ms. Sujata Gaikwad",
     status: "APPROVED",
     is_activated: true,
     must_change_credentials: false
@@ -152,7 +202,7 @@ const users = [
 ];
 
 const students = [];
-let curr_id = 3;
+let curr_id = 8;
 
 for (const [roll, prn, name] of div_a_raw) {
   const roll_str = String(roll).padStart(2, '0');
@@ -384,7 +434,12 @@ const INITIAL_DB = {
   hod_pin: "1234",
   teachers: [
     { id: 1, user_id: 1, name: "Dr. Dhanashree Kulkarni", email: "teacher@campus.edu", teacher_id_code: "HOD101", department_id: 1, designation: "Head of Department" },
-    { id: 2, user_id: 2, name: "Prof. A. R. Sharma", email: "faculty@campus.edu", teacher_id_code: "T102", department_id: 1, designation: "Assistant Professor" }
+    { id: 2, user_id: 2, name: "Dr. Sagar Shinde", email: "sagar.shinde@campus.edu", teacher_id_code: "T102", department_id: 1, designation: "Professor" },
+    { id: 3, user_id: 3, name: "Dr. Priyanka Patil", email: "priyanka.patil@campus.edu", teacher_id_code: "T103", department_id: 1, designation: "Associate Professor" },
+    { id: 4, user_id: 4, name: "Ms. Dhanashree Dixit", email: "dhanashree.dixit@campus.edu", teacher_id_code: "T104", department_id: 1, designation: "Assistant Professor" },
+    { id: 5, user_id: 5, name: "Ms. Muktai Surnar", email: "muktai.surnar@campus.edu", teacher_id_code: "T105", department_id: 1, designation: "Assistant Professor" },
+    { id: 6, user_id: 6, name: "Mr. Vikas T.", email: "vikas.t@campus.edu", teacher_id_code: "T106", department_id: 1, designation: "Assistant Professor" },
+    { id: 7, user_id: 7, name: "Ms. Sujata Gaikwad", email: "sujata.gaikwad@campus.edu", teacher_id_code: "T107", department_id: 1, designation: "Assistant Professor" }
   ],
   timetable: ` + JSON.stringify(official_timetable, null, 2) + `
 };
@@ -394,10 +449,10 @@ const INITIAL_DB = {
   try {
     if (typeof localStorage !== 'undefined') {
       const currentReset = localStorage.getItem('ece_hard_reset_token');
-      if (currentReset !== 'v400000_purge_all_certificates') {
+      if (currentReset !== 'v500000_official_faculty_roster') {
         localStorage.clear();
         if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
-        localStorage.setItem('ece_hard_reset_token', 'v400000_purge_all_certificates');
+        localStorage.setItem('ece_hard_reset_token', 'v500000_official_faculty_roster');
         if (typeof document !== 'undefined' && document.cookie) {
           document.cookie.split(";").forEach(function(c) {
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
@@ -408,7 +463,7 @@ const INITIAL_DB = {
   } catch(e) {}
 })();
 
-const LOCAL_STORAGE_KEY = "ece_campus_db_v400000_purge_all_certificates";
+const LOCAL_STORAGE_KEY = "ece_campus_db_v500000_official_faculty_roster";
 
 // Google Firebase Realtime Database Configuration & Client
 const FIREBASE_CONFIG = {
@@ -565,9 +620,9 @@ function mergeDBs(localDb, cloudDb) {
 
   // 1. Merge users
   const userMap = new Map();
-  (localDb.users || []).concat(cloudDb.users || []).forEach(u => {
+  (INITIAL_DB.users || []).concat(localDb.users || []).concat(cloudDb.users || []).forEach(u => {
     if (!u) return;
-    const key = u.prn_no ? ('prn_' + u.prn_no.toUpperCase()) : (u.id ? ('uid_' + u.id) : ('rand_' + Math.random()));
+    const key = u.prn_no ? ('prn_' + u.prn_no.toUpperCase()) : (u.id ? ('uid_' + u.id) : (u.email ? ('email_' + u.email.toLowerCase()) : ('rand_' + Math.random())));
     if (!userMap.has(key)) {
       userMap.set(key, { ...u });
     } else {
@@ -628,14 +683,26 @@ function mergeDBs(localDb, cloudDb) {
   merged.time_slots = INITIAL_DB.time_slots;
   merged.activity_records = cloudDb.activity_records || localDb.activity_records || [];
   merged.activity_subjects = cloudDb.activity_subjects || localDb.activity_subjects || [];
-  merged.password_requests = cloudDb.password_requests || localDb.password_requests || [];
-  merged.teachers = cloudDb.teachers || localDb.teachers || INITIAL_DB.teachers;
+  const teacherMap = new Map();
+  (INITIAL_DB.teachers || []).concat(localDb.teachers || []).concat(cloudDb.teachers || []).forEach(t => {
+    if (!t) return;
+    const key = t.teacher_id_code ? t.teacher_id_code : String(t.id);
+    if (!teacherMap.has(key)) {
+      teacherMap.set(key, { ...t });
+    } else {
+      const ex = teacherMap.get(key);
+      if (t.name) ex.name = t.name;
+      if (t.email) ex.email = t.email;
+      if (t.designation) ex.designation = t.designation;
+    }
+  });
+  merged.teachers = Array.from(teacherMap.values());
 
   // Synchronize teacher emails with updated user emails
   (merged.users || []).forEach(u => {
     if ((u.role === 'HOD' || u.role === 'TEACHER') && u.email) {
       (merged.teachers || []).forEach(t => {
-        if (t.user_id == u.id || (u.role === 'HOD' && t.teacher_id_code === 'HOD101') || (u.role === 'TEACHER' && t.teacher_id_code === 'T102')) {
+        if (t.user_id == u.id || (u.role === 'HOD' && t.teacher_id_code === 'HOD101') || (u.email && t.email && u.email.toLowerCase() === t.email.toLowerCase())) {
           t.email = u.email;
         }
       });
