@@ -822,15 +822,16 @@ const App = {
       const student = typeof findCurrentStudent === 'function' ? findCurrentStudent(db, user) : null;
       const newName = isStudent ? (user.name || (student ? student.name : '')) : document.getElementById('edit-profile-name').value.trim();
 
-      if (isHod) {
+      if (user.role === 'HOD' || user.role === 'TEACHER') {
         const elHodPin = document.getElementById('edit-profile-hod-pin');
-        if (elHodPin && elHodPin.value.trim()) {
+        if (isHod && elHodPin && elHodPin.value.trim()) {
           db.hod_pin = elHodPin.value.trim();
         }
-        // Also update teacher email
+        // Update teacher record in db.teachers
         (db.teachers || []).forEach(t => {
-          if (t.user_id == user.id || t.teacher_id_code === 'HOD101') {
+          if (t.user_id == user.id || (isHod && t.teacher_id_code === 'HOD101') || (t.email && t.email.toLowerCase() === user.email.toLowerCase())) {
             if (newEmail) t.email = newEmail;
+            if (newName && !isStudent) t.name = newName;
           }
         });
       }
