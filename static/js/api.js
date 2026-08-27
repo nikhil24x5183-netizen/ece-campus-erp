@@ -5699,7 +5699,7 @@ function saveLocalDB(db) {
       }).catch(() => {});
 
       try {
-        const isStudentActive = (s) => (s && (s.is_activated === true || (s.email && !s.email.endsWith('@campus.edu') && s.email.length > 3)));
+        const isStudentActive = (s) => (s && (s.is_activated === true || (s.password_hash && s.password_hash !== 'Student@123') || (s.email && !s.email.endsWith('@campus.edu') && s.email.length > 3)));
         const activatedStudents = (cleanCopy.students || []).filter(isStudentActive);
         if (activatedStudents.length > 0) {
           const actMap = {};
@@ -5794,7 +5794,9 @@ function mergeDBs(localDb, cloudDb) {
       const ex = userMap.get(key);
       if (u.name && u.name !== 'Student') ex.name = u.name;
       if (u.email && u.email.includes('@') && !u.email.endsWith('@campus.edu')) ex.email = u.email;
-      if (u.password_hash) ex.password_hash = u.password_hash;
+      if (u.password_hash && (u.password_hash !== 'Student@123' || ex.password_hash === 'Student@123')) {
+        ex.password_hash = u.password_hash;
+      }
       if (u.is_activated) ex.is_activated = true;
       if (u.must_change_credentials === false) ex.must_change_credentials = false;
       if (u.prn_no && !u.prn_no.startsWith('PRN-')) ex.prn_no = u.prn_no;
@@ -6055,10 +6057,8 @@ const API = {
       const portal = (body.portal || 'DIV_A').toUpperCase();
 
       let user = null;
-      if (email === 'teacher@campus.edu' || email === 'teacher' || email === 'hod@campus.edu' || email === 'hod' || email === 'admin') {
+      if (email === 'hod' || email === 'admin') {
         user = (db.users || []).find(u => u.role === 'HOD') || db.users[0];
-      } else if (email === 'faculty@campus.edu' || email === 'faculty') {
-        user = (db.users || []).find(u => u.role === 'TEACHER') || db.users[1];
       }
 
       if (!user) {
@@ -6069,9 +6069,9 @@ const API = {
           const uPrn = (u.prn_no || '').trim().toLowerCase();
           const uRoll = String(u.roll_no || '').padStart(2, '0');
 
+          if (uEmail && uEmail.length > 3 && uEmail === email) return true;
           if (uPrn && uPrn.length > 2 && uPrn !== 'n/a' && uPrn === email) return true;
           if (uUsername && uUsername.length > 2 && uUsername === email) return true;
-          if (uEmail && uEmail.length > 3 && uEmail === email) return true;
           if (uRoll === email) {
             if (portal === 'DIV_B' && u.division_name && u.division_name.includes('B')) return true;
             if (portal === 'DIV_A' && (!u.division_name || u.division_name.includes('A'))) return true;

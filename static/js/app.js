@@ -841,17 +841,29 @@ const App = {
       if (dbUser) {
         if (!isStudent && newName) dbUser.name = newName;
         dbUser.email = newEmail;
-        if (newPassword && newPassword.trim()) dbUser.password_hash = newPassword.trim();
+        if (newPassword && newPassword.trim()) {
+          dbUser.password_hash = newPassword.trim();
+          dbUser.is_activated = true;
+          dbUser.must_change_credentials = false;
+        }
       }
 
       if (!isStudent && newName) user.name = newName;
       user.email = newEmail;
-      if (newPassword && newPassword.trim()) user.password_hash = newPassword.trim();
+      if (newPassword && newPassword.trim()) {
+        user.password_hash = newPassword.trim();
+        user.is_activated = true;
+        user.must_change_credentials = false;
+      }
 
       if (student) {
         if (!isStudent && newName) student.name = newName;
         student.email = newEmail;
-        if (newPassword && newPassword.trim()) student.password_hash = newPassword.trim();
+        if (newPassword && newPassword.trim()) {
+          student.password_hash = newPassword.trim();
+          student.is_activated = true;
+          student.must_change_credentials = false;
+        }
 
         if (!isStudent) {
           const newRoll = document.getElementById('edit-profile-roll').value.trim();
