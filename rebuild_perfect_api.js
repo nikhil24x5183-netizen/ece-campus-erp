@@ -1550,7 +1550,17 @@ const API = {
         batches: db.batches,
         time_slots: db.time_slots,
         timetable: db.timetable,
-        teachers: db.teachers
+        teachers: db.teachers,
+        subjects: [
+          { id: 1, name: "Signals and Systems", code: "SS" },
+          { id: 2, name: "Data Structures and Algorithms", code: "DSA" },
+          { id: 3, name: "Semiconductor Devices and Circuits", code: "SDC" },
+          { id: 4, name: "Fundamental of Data Science", code: "FDS" },
+          { id: 5, name: "Principles of Management and Entrepreneurship", code: "PME" },
+          { id: 6, name: "Vocational & Skill Enhancement Course", code: "VSEC" },
+          { id: 7, name: "Open Elective Course", code: "OEC" },
+          { id: 8, name: "Value Added Course", code: "VEC" }
+        ]
       };
     }
 

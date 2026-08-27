@@ -82,13 +82,17 @@ const Timetable = {
         const batchTag = e.batch_name ? `<span class="tt-batch-tag">${e.batch_name}</span> ` : '';
         const isHighlight = (e.subject_code && (e.subject_code.includes('PP') || e.subject_code.includes('TUT'))) ? 'highlight-yellow' : '';
         const roomStr = e.room_no || e.room || '';
-        const roomTag = roomStr ? `<div class="tt-meta"><span>${roomStr}</span></div>` : '';
+        const roomTag = roomStr ? `<div class="tt-meta"><span><i class="fa-solid fa-location-dot" style="font-size: 0.68rem; margin-right: 0.25rem;"></i>${roomStr}</span></div>` : '';
+        const teacherStr = e.teacher_name || (e.teacher ? e.teacher.name : '');
+        const teacherTag = teacherStr ? `<div class="tt-meta" style="font-size: 0.7rem; color: #475569; margin-top: 0.15rem;"><span><i class="fa-solid fa-chalkboard-user" style="font-size: 0.68rem; margin-right: 0.25rem;"></i>${teacherStr}</span></div>` : '';
+        const subjectTitle = e.subject_code || e.subject_name || (e.subject ? e.subject.name : 'FREE');
         
         return `
           <div class="tt-card ${isHighlight} card-${e.activity_type}" onclick="${readOnly ? '' : `Timetable.openEditModal(${e.id}, '${e.day_of_week}', ${e.time_slot_id || 1}, ${e.division_id})`}">
             <div class="tt-subject">
-              <span>${batchTag}${e.subject_code || e.subject_name || 'FREE'}</span>
+              <span>${batchTag}${subjectTitle}</span>
             </div>
+            ${teacherTag}
             ${roomTag}
           </div>
         `;
@@ -371,17 +375,44 @@ const Timetable = {
     this.populateModalDropdowns(divId);
     try {
       const res = await API.get(`/api/timetable?department_id=${this.selectedDeptId}&semester_id=${this.selectedSemId}&academic_year=${this.selectedAcadYear}`);
-      const entry = (res.timetable || []).find(e => e.id == entryId);
+      const entry = (res.timetable || []).find(e => String(e.id) === String(entryId));
       if (!entry) return;
 
       document.getElementById('tt-entry-id').value = entry.id;
-      document.getElementById('tt-day').value = entry.day_of_week;
-      document.getElementById('tt-slot').value = entry.time_slot_id;
-      document.getElementById('tt-activity-type').value = entry.activity_type;
-      document.getElementById('tt-subject').value = entry.subject_id || '';
-      document.getElementById('tt-batch').value = entry.batch_id || '';
-      document.getElementById('tt-teacher').value = entry.teacher_id || '';
-      document.getElementById('tt-room').value = entry.room || '';
+      document.getElementById('tt-day').value = entry.day_of_week || day;
+      document.getElementById('tt-slot').value = entry.time_slot_id || slotId;
+      document.getElementById('tt-activity-type').value = entry.activity_type || 'THEORY';
+
+      // Match Subject ID
+      const subjSelect = document.getElementById('tt-subject');
+      let foundSubjId = entry.subject_id;
+      if (!foundSubjId && (entry.subject_code || entry.subject_name)) {
+        const codeOrName = (entry.subject_code || entry.subject_name || '').toUpperCase();
+        const matched = (this.meta.subjects || []).find(s => codeOrName.includes(s.code) || codeOrName.includes(s.name.toUpperCase()));
+        if (matched) foundSubjId = matched.id;
+      }
+      subjSelect.value = foundSubjId || '';
+
+      // Match Batch ID
+      const batchSelect = document.getElementById('tt-batch');
+      let foundBatchId = entry.batch_id;
+      if (!foundBatchId && entry.batch_name) {
+        const matchedB = (this.meta.batches || []).find(b => b.name === entry.batch_name && b.division_id == divId);
+        if (matchedB) foundBatchId = matchedB.id;
+      }
+      batchSelect.value = foundBatchId || '';
+
+      // Match Teacher ID
+      const teacherSelect = document.getElementById('tt-teacher');
+      let foundTeacherId = entry.teacher_id;
+      if (!foundTeacherId && entry.teacher_name) {
+        const matchedT = (this.meta.teachers || []).find(t => entry.teacher_name.toLowerCase().includes(t.name.toLowerCase()) || t.name.toLowerCase().includes(entry.teacher_name.toLowerCase()));
+        if (matchedT) foundTeacherId = matchedT.id;
+      }
+      teacherSelect.value = foundTeacherId || '';
+
+      // Room Input
+      document.getElementById('tt-room').value = entry.room_no || entry.room || '';
 
       const btnDelete = document.getElementById('btn-delete-tt');
       btnDelete.style.display = 'inline-block';
@@ -398,7 +429,7 @@ const Timetable = {
     if (!this.meta) return;
 
     document.getElementById('tt-slot').innerHTML = (this.meta.time_slots || []).map(s => 
-      `<option value="${s.id}">${s.name} (${s.start_time}-${s.end_time})</option>`
+      `<option value="${s.id}">${s.name || s.label} (${s.start_time}-${s.end_time})</option>`
     ).join('');
 
     document.getElementById('tt-subject').innerHTML = `<option value="">Select Subject</option>` + (this.meta.subjects || []).map(s => 
@@ -417,25 +448,39 @@ const Timetable = {
 
   async handleSaveEntry(e, divId, subSlot = 0) {
     e.preventDefault();
+    const subjId = document.getElementById('tt-subject').value;
+    const batchId = document.getElementById('tt-batch').value;
+    const teacherId = document.getElementById('tt-teacher').value;
+
+    const matchedSubj = (this.meta.subjects || []).find(s => s.id == subjId);
+    const matchedBatch = (this.meta.batches || []).find(b => b.id == batchId);
+    const matchedTeacher = (this.meta.teachers || []).find(t => t.id == teacherId);
+    const roomVal = document.getElementById('tt-room').value.trim();
+
     const payload = {
-      id: document.getElementById('tt-entry-id').value || null,
+      id: document.getElementById('tt-entry-id').value || Date.now(),
       department_id: this.selectedDeptId,
       semester_id: this.selectedSemId,
       division_id: divId,
       academic_year: this.selectedAcadYear,
       day_of_week: document.getElementById('tt-day').value,
-      time_slot_id: document.getElementById('tt-slot').value,
+      time_slot_id: parseInt(document.getElementById('tt-slot').value) || 1,
       sub_slot: subSlot,
       activity_type: document.getElementById('tt-activity-type').value,
-      subject_id: document.getElementById('tt-subject').value || null,
-      batch_id: document.getElementById('tt-batch').value || null,
-      teacher_id: document.getElementById('tt-teacher').value || null,
-      room: document.getElementById('tt-room').value
+      subject_id: subjId ? parseInt(subjId) : null,
+      subject_name: matchedSubj ? matchedSubj.name : '',
+      subject_code: matchedSubj ? matchedSubj.code : '',
+      batch_id: batchId ? parseInt(batchId) : null,
+      batch_name: matchedBatch ? matchedBatch.name : '',
+      teacher_id: teacherId ? parseInt(teacherId) : null,
+      teacher_name: matchedTeacher ? matchedTeacher.name : '',
+      room_no: roomVal,
+      room: roomVal
     };
 
     try {
       const res = await API.post('/api/timetable', payload);
-      Toast.success(res.message || 'Timetable saved.');
+      Toast.success(res.message || 'Timetable entry saved & synced!');
       closeModal('modal-timetable-edit');
       const viewContainer = document.getElementById('view-container');
       viewContainer.innerHTML = await this.render(window.currentUser && window.currentUser.role === 'STUDENT');
