@@ -441,6 +441,20 @@
           </div>
         </div>
 
+        <!-- HOD 4-Digit Security PIN Field (Visible for HOD role) -->
+        <div class="form-group" id="edit-profile-hod-pin-group" style="display: none;">
+          <label><i class="fa-solid fa-key" style="color: var(--accent-gold);"></i> HOD 4-Digit Security PIN <span style="color: var(--accent-rose);">*</span></label>
+          <div class="password-toggle-group">
+            <input type="password" id="edit-profile-hod-pin" class="form-control" placeholder="Enter 4-digit PIN (Default: 1234)" maxlength="6" autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('edit-profile-hod-pin', this)" title="Show/Hide PIN">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <small style="color: var(--text-muted); font-size: 0.76rem; display: block; margin-top: 0.25rem;">
+            This 4-digit PIN is required to unlock the HOD Security Verification Desk.
+          </small>
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-secondary" onclick="closeModal('modal-universal-edit-profile')">Cancel</button>
           <button type="submit" id="btn-submit-edit-profile" class="btn btn-primary" style="background: #16a34a; border-color: #16a34a; font-weight: 800;">
@@ -637,16 +651,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
-  <!-- JavaScript Modules with Cache Buster v=4800 -->
-  <script src="./static/js/api.js?v=4800"></script>
-  <script src="./static/js/utils/toast.js?v=4800"></script>
-  <script src="./static/js/utils/exporter.js?v=4800"></script>
-  <script src="./static/js/views/auth.js?v=4800"></script>
-  <script src="./static/js/views/student.js?v=4800"></script>
-  <script src="./static/js/views/teacher.js?v=4800"></script>
-  <script src="./static/js/views/hod.js?v=4800"></script>
-  <script src="./static/js/views/timetable.js?v=4800"></script>
-  <script src="./static/js/views/reports.js?v=4800"></script>
-  <script src="./static/js/app.js?v=4800"></script>
+  <!-- JavaScript Modules with Cache Buster v=4900 -->
+  <script src="./static/js/api.js?v=4900"></script>
+  <script src="./static/js/utils/toast.js?v=4900"></script>
+  <script src="./static/js/utils/exporter.js?v=4900"></script>
+  <script src="./static/js/views/auth.js?v=4900"></script>
+  <script src="./static/js/views/student.js?v=4900"></script>
+  <script src="./static/js/views/teacher.js?v=4900"></script>
+  <script src="./static/js/views/hod.js?v=4900"></script>
+  <script src="./static/js/views/timetable.js?v=4900"></script>
+  <script src="./static/js/views/reports.js?v=4900"></script>
+  <script src="./static/js/app.js?v=4900"></script>
 </body>
 </html>

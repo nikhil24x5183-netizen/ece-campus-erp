@@ -72,6 +72,7 @@ const TeacherView = {
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem;">Teacher ID Code: ${teacher.teacher_id_code || 'HOD101'} | Department: ${teacher.department_name || 'ECE'} | ${teacher.designation || 'Head of Department'}</p>
               </div>
               <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                <button onclick="App.openEditProfileModal()" class="btn btn-warning btn-sm" style="font-weight: 800; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none;"><i class="fa-solid fa-key"></i> HOD PIN & Account Settings</button>
                 <a href="#/hod/approvals" class="btn btn-primary btn-sm"><i class="fa-solid fa-square-check"></i> HOD Approval Desk</a>
                 <a href="#/hod/teachers" class="btn btn-black btn-sm"><i class="fa-solid fa-user-plus"></i> Add Teachers</a>
                 <a href="#/hod/students" class="btn btn-black btn-sm"><i class="fa-solid fa-graduation-cap"></i> Register Students</a>

@@ -786,6 +786,16 @@ const App = {
       lockNotice.style.display = isStudent ? 'block' : 'none';
     }
 
+    const isHod = (user.role === 'HOD');
+    const hodPinGroup = document.getElementById('edit-profile-hod-pin-group');
+    const elHodPin = document.getElementById('edit-profile-hod-pin');
+    if (hodPinGroup) {
+      hodPinGroup.style.display = isHod ? 'block' : 'none';
+      if (elHodPin) {
+        elHodPin.value = db.hod_pin || '1234';
+      }
+    }
+
     if (typeof openModal === 'function') openModal('modal-universal-edit-profile');
   },
 
@@ -802,6 +812,7 @@ const App = {
       if (!user) throw new Error('Session expired. Please log in again.');
 
       const isStudent = (user.role === 'STUDENT');
+      const isHod = (user.role === 'HOD');
       const newEmail = document.getElementById('edit-profile-email').value.trim();
       const newPassword = document.getElementById('edit-profile-new-password').value;
 
@@ -810,6 +821,19 @@ const App = {
       const db = typeof getLocalDB === 'function' ? getLocalDB() : { users: [], students: [] };
       const student = typeof findCurrentStudent === 'function' ? findCurrentStudent(db, user) : null;
       const newName = isStudent ? (user.name || (student ? student.name : '')) : document.getElementById('edit-profile-name').value.trim();
+
+      if (isHod) {
+        const elHodPin = document.getElementById('edit-profile-hod-pin');
+        if (elHodPin && elHodPin.value.trim()) {
+          db.hod_pin = elHodPin.value.trim();
+        }
+        // Also update teacher email
+        (db.teachers || []).forEach(t => {
+          if (t.user_id == user.id || t.teacher_id_code === 'HOD101') {
+            if (newEmail) t.email = newEmail;
+          }
+        });
+      }
 
       const dbUser = (db.users || []).find(u => (u.id && user.id && u.id == user.id) || (u.email && u.email.trim().toLowerCase() === user.email.trim().toLowerCase()) || (user.prn_no && u.prn_no && u.prn_no.toUpperCase() === user.prn_no.toUpperCase()));
 
