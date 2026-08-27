@@ -631,6 +631,17 @@ function mergeDBs(localDb, cloudDb) {
   merged.password_requests = cloudDb.password_requests || localDb.password_requests || [];
   merged.teachers = cloudDb.teachers || localDb.teachers || INITIAL_DB.teachers;
 
+  // Synchronize teacher emails with updated user emails
+  (merged.users || []).forEach(u => {
+    if ((u.role === 'HOD' || u.role === 'TEACHER') && u.email) {
+      (merged.teachers || []).forEach(t => {
+        if (t.user_id == u.id || (u.role === 'HOD' && t.teacher_id_code === 'HOD101') || (u.role === 'TEACHER' && t.teacher_id_code === 'T102')) {
+          t.email = u.email;
+        }
+      });
+    }
+  });
+
   return merged;
 }
 
@@ -1337,6 +1348,12 @@ const API = {
 
     // 12. Faculty Management Endpoints
     if (endpoint === '/api/hod/teachers' && method === 'GET') {
+      (db.teachers || []).forEach(t => {
+        const u = (db.users || []).find(user => user.id == t.user_id || (user.role === 'HOD' && t.teacher_id_code === 'HOD101') || (user.role === 'TEACHER' && t.teacher_id_code === 'T102'));
+        if (u && u.email) {
+          t.email = u.email;
+        }
+      });
       return { teachers: db.teachers || [] };
     }
 
@@ -1414,14 +1431,21 @@ const API = {
 
     if (endpoint === '/api/hod/change-password' && method === 'POST') {
       const { new_email, new_password, new_pin } = body;
+      const cleanEmail = (new_email || '').trim().toLowerCase();
       const hodUser = (db.users || []).find(u => u.role === 'HOD') || db.users[0];
       if (hodUser) {
-        if (new_email) hodUser.email = new_email;
+        if (cleanEmail) hodUser.email = cleanEmail;
         if (new_password) hodUser.password_hash = new_password;
+
+        (db.teachers || []).forEach(t => {
+          if (t.user_id == hodUser.id || t.teacher_id_code === 'HOD101') {
+            if (cleanEmail) t.email = cleanEmail;
+          }
+        });
       }
       if (new_pin) db.hod_pin = new_pin;
       saveLocalDB(db);
-      return { success: true, message: 'HOD credentials updated successfully' };
+      return { success: true, message: 'HOD credentials updated successfully', user: hodUser };
     }
 
     // 15. Timetable API (With Live Realtime Database Updates)

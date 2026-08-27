@@ -747,11 +747,17 @@ const HodView = {
     try {
       const res = await API.post('/api/hod/change-password', { new_email, current_password, new_password, new_pin });
       Toast.success(res.message || 'Account email, password & Security PIN updated!');
-      if (res.user && window.App) {
-        App.currentUser.email = res.user.email;
+      if (window.App && App.currentUser) {
+        if (new_email) App.currentUser.email = new_email.trim().toLowerCase();
+        if (typeof setSessionUser === 'function') setSessionUser(App.currentUser);
       }
       closeModal('modal-hod-change-password');
       document.getElementById('form-hod-change-password').reset();
+
+      const container = document.getElementById('view-container');
+      if (container && window.location.hash.includes('teachers')) {
+        container.innerHTML = await HodView.renderTeachers();
+      }
     } catch (err) {
       Toast.error(err.message || 'Failed to update account settings.');
     } finally {
