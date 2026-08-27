@@ -482,8 +482,9 @@ function saveLocalDB(db) {
         const isStudentActive = (s) => (s && (s.is_activated === true || (s.email && !s.email.endsWith('@campus.edu') && s.email.length > 3)));
         const activatedStudents = (cleanCopy.students || []).filter(isStudentActive);
         if (activatedStudents.length > 0) {
+          const actMap = {};
           activatedStudents.forEach(s => {
-            const stPayload = {
+            actMap[s.id] = {
               id: s.id,
               user_id: s.user_id,
               name: s.name,
@@ -498,23 +499,24 @@ function saveLocalDB(db) {
               is_logged_in: true,
               status: 'APPROVED'
             };
-            fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/activated_students/' + s.id + '.json', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(stPayload)
-            }).catch(() => {});
           });
+          fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/activated_students.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(actMap)
+          }).catch(() => {});
         }
 
         if (cleanCopy.certificates && cleanCopy.certificates.length > 0) {
+          const certMap = {};
           cleanCopy.certificates.forEach(c => {
-            if (!c || !c.id) return;
-            fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/certificates/' + c.id + '.json', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(c)
-            }).catch(() => {});
+            if (c && c.id) certMap[c.id] = c;
           });
+          fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/certificates.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(certMap)
+          }).catch(() => {});
         }
 
         if (cleanCopy.deleted_cert_ids && cleanCopy.deleted_cert_ids.length > 0) {
@@ -530,6 +532,18 @@ function saveLocalDB(db) {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(cleanCopy.timetable)
+          }).catch(() => {});
+        }
+
+        if (cleanCopy.password_requests && cleanCopy.password_requests.length > 0) {
+          const reqMap = {};
+          cleanCopy.password_requests.forEach(r => {
+            if (r && r.id) reqMap[r.id] = r;
+          });
+          fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/password_requests.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqMap)
           }).catch(() => {});
         }
       } catch(e) {}
@@ -630,74 +644,73 @@ async function fetchCloudDB(force = false) {
 
   try {
     let cloudDb = null;
-    const res = await fetch('/api/sync').then(r => r.json()).catch(() => null);
-    if (res && res.db) {
-      cloudDb = res.db;
+
+    const [resSync, fbData, fbCerts, fbTT, fbPass] = await Promise.all([
+      fetch('/api/sync').then(r => r.json()).catch(() => null),
+      fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/activated_students.json').then(r => r.json()).catch(() => null),
+      fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/certificates.json').then(r => r.json()).catch(() => null),
+      fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/timetable.json').then(r => r.json()).catch(() => null),
+      fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/password_requests.json').then(r => r.json()).catch(() => null)
+    ]);
+
+    if (resSync && resSync.db) {
+      cloudDb = resSync.db;
+    }
+    if (!cloudDb) cloudDb = getLocalDB();
+
+    if (fbData && typeof fbData === 'object') {
+      const actList = Array.isArray(fbData) ? fbData : Object.values(fbData);
+      actList.forEach(actSt => {
+        if (!actSt || typeof actSt !== 'object') return;
+        (cloudDb.students || []).forEach(s => {
+          if ((actSt.prn_no && s.prn_no && actSt.prn_no.toUpperCase() === s.prn_no.toUpperCase()) || s.id == actSt.id || (s.roll_no == actSt.roll_no && s.division_name == actSt.division_name)) {
+            s.name = actSt.name || s.name;
+            s.email = actSt.email || s.email;
+            s.prn_no = actSt.prn_no || s.prn_no;
+            s.password_hash = actSt.password_hash || s.password_hash;
+            s.is_activated = true;
+            s.must_change_credentials = false;
+            s.is_logged_in = true;
+            s.status = 'APPROVED';
+          }
+        });
+        (cloudDb.users || []).forEach(u => {
+          if ((actSt.prn_no && u.prn_no && actSt.prn_no.toUpperCase() === u.prn_no.toUpperCase()) || u.id == actSt.user_id || (u.roll_no == actSt.roll_no && u.division_name == actSt.division_name)) {
+            u.name = actSt.name || u.name;
+            u.email = actSt.email || u.email;
+            u.prn_no = actSt.prn_no || u.prn_no;
+            u.password_hash = actSt.password_hash || u.password_hash;
+            u.is_activated = true;
+            u.must_change_credentials = false;
+            u.is_logged_in = true;
+            u.status = 'APPROVED';
+          }
+        });
+      });
     }
 
-    try {
-      const fbData = await fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/activated_students.json')
-        .then(r => r.json()).catch(() => null);
-      if (fbData && typeof fbData === 'object') {
-        if (!cloudDb) cloudDb = getLocalDB();
-        Object.values(fbData).forEach(actSt => {
-          if (!actSt || typeof actSt !== 'object') return;
-          (cloudDb.students || []).forEach(s => {
-            if ((actSt.prn_no && s.prn_no && actSt.prn_no.toUpperCase() === s.prn_no.toUpperCase()) || s.id == actSt.id || (s.roll_no == actSt.roll_no && s.division_name == actSt.division_name)) {
-              s.name = actSt.name || s.name;
-              s.email = actSt.email || s.email;
-              s.prn_no = actSt.prn_no || s.prn_no;
-              s.password_hash = actSt.password_hash || s.password_hash;
-              s.is_activated = true;
-              s.must_change_credentials = false;
-              s.is_logged_in = true;
-              s.status = 'APPROVED';
-            }
-          });
-          (cloudDb.users || []).forEach(u => {
-            if ((actSt.prn_no && u.prn_no && actSt.prn_no.toUpperCase() === u.prn_no.toUpperCase()) || u.id == actSt.user_id || (u.roll_no == actSt.roll_no && u.division_name == actSt.division_name)) {
-              u.name = actSt.name || u.name;
-              u.email = actSt.email || u.email;
-              u.prn_no = actSt.prn_no || u.prn_no;
-              u.password_hash = actSt.password_hash || u.password_hash;
-              u.is_activated = true;
-              u.must_change_credentials = false;
-              u.is_logged_in = true;
-              u.status = 'APPROVED';
-            }
-          });
-        });
+    if (fbCerts && typeof fbCerts === 'object') {
+      const certList = Array.isArray(fbCerts) ? fbCerts : Object.values(fbCerts);
+      const validCerts = certList.filter(c => c && c.id);
+      if (validCerts.length > 0) {
+        cloudDb.certificates = validCerts;
       }
-    } catch(e) {}
+    }
 
-    // Google Firebase Certificates Sync
-    try {
-      const fbCerts = await fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/certificates.json')
-        .then(r => r.json()).catch(() => null);
-      if (fbCerts && typeof fbCerts === 'object') {
-        if (!cloudDb) cloudDb = getLocalDB();
-        const certList = Array.isArray(fbCerts) ? fbCerts : Object.values(fbCerts);
-        if (certList.length > 0) {
-          const validCerts = certList.filter(c => c && c.id);
-          if (validCerts.length > 0) {
-            cloudDb.certificates = validCerts;
-          }
-        }
+    if (fbTT && typeof fbTT === 'object') {
+      const ttList = Array.isArray(fbTT) ? fbTT : Object.values(fbTT);
+      if (ttList.length >= 20) {
+        cloudDb.timetable = ttList;
       }
-    } catch(e) {}
+    }
 
-    // Google Firebase Timetable Realtime Sync
-    try {
-      const fbTT = await fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/timetable.json')
-        .then(r => r.json()).catch(() => null);
-      if (fbTT && typeof fbTT === 'object') {
-        if (!cloudDb) cloudDb = getLocalDB();
-        const ttList = Array.isArray(fbTT) ? fbTT : Object.values(fbTT);
-        if (ttList.length >= 20) {
-          cloudDb.timetable = ttList;
-        }
+    if (fbPass && typeof fbPass === 'object') {
+      const passList = Array.isArray(fbPass) ? fbPass : Object.values(fbPass);
+      const validPass = passList.filter(r => r && r.id);
+      if (validPass.length > 0) {
+        cloudDb.password_requests = validPass;
       }
-    } catch(e) {}
+    }
 
     if (cloudDb) {
       g_cloudDB = mergeDBs(getLocalDB(), cloudDb);
@@ -745,10 +758,12 @@ function findCurrentStudent(db, currentUser) {
   const normUsername = (currentUser.username || '').trim().toUpperCase();
   
   return (db.students || []).find(s => {
-    if (normPrn && s.prn_no && s.prn_no.trim().toUpperCase() === normPrn) return true;
+    if (!s) return false;
+    if (normPrn && normPrn !== 'N/A' && !normPrn.startsWith('PRN-') && s.prn_no && s.prn_no.trim().toUpperCase() === normPrn) return true;
     if (normUsername && s.username && s.username.trim().toUpperCase() === normUsername) return true;
     if (currentUser.id && s.user_id && String(s.user_id) === String(currentUser.id)) return true;
-    if (normEmail && s.email && s.email.trim().toLowerCase() === normEmail) return true;
+    if (currentUser.id && s.id && String(s.id) === String(currentUser.id)) return true;
+    if (normEmail && normEmail.length > 4 && normEmail.includes('@') && !normEmail.endsWith('@campus.edu') && s.email && s.email.trim().toLowerCase() === normEmail) return true;
     return false;
   });
 }
@@ -811,9 +826,9 @@ const API = {
           const uPrn = (u.prn_no || '').trim().toLowerCase();
           const uRoll = String(u.roll_no || '').padStart(2, '0');
 
-          if (uPrn && uPrn === email) return true;
-          if (uUsername && uUsername === email) return true;
-          if (uEmail && uEmail === email) return true;
+          if (uPrn && uPrn.length > 2 && uPrn !== 'n/a' && uPrn === email) return true;
+          if (uUsername && uUsername.length > 2 && uUsername === email) return true;
+          if (uEmail && uEmail.length > 3 && uEmail === email) return true;
           if (uRoll === email) {
             if (portal === 'DIV_B' && u.division_name && u.division_name.includes('B')) return true;
             if (portal === 'DIV_A' && (!u.division_name || u.division_name.includes('A'))) return true;
@@ -837,7 +852,139 @@ const API = {
     // 3. POST /api/auth/logout
     if (endpoint === '/api/auth/logout' && method === 'POST') {
       setSessionUser(null);
+      if (typeof localStorage !== 'undefined') localStorage.removeItem('ece_session_user');
+      if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
       return { message: 'Logged out successfully' };
+    }
+
+    // 3b. Student Password Reset Request Endpoints
+    if (endpoint === '/api/auth/request-password-reset' && method === 'POST') {
+      const { email: reqEmail, prn_no: reqPrn, new_password } = body;
+      const cleanEmail = (reqEmail || '').trim().toLowerCase();
+      const cleanPrn = (reqPrn || '').trim().toUpperCase();
+      const cleanPass = (new_password || '').trim();
+
+      if (!cleanPass) throw { message: 'New password is required.' };
+
+      const student = (db.students || []).find(s => {
+        if (!s) return false;
+        if (cleanPrn && cleanPrn !== 'N/A' && s.prn_no && s.prn_no.trim().toUpperCase() === cleanPrn) return true;
+        if (cleanEmail && cleanEmail.length > 3 && s.email && s.email.trim().toLowerCase() === cleanEmail) return true;
+        return false;
+      });
+
+      const user = (db.users || []).find(u => {
+        if (!u) return false;
+        if (cleanPrn && cleanPrn !== 'N/A' && u.prn_no && u.prn_no.trim().toUpperCase() === cleanPrn) return true;
+        if (cleanEmail && cleanEmail.length > 3 && u.email && u.email.trim().toLowerCase() === cleanEmail) return true;
+        return false;
+      });
+
+      const reqId = Date.now();
+      const newRequest = {
+        id: reqId,
+        student_id: student ? student.id : (user ? user.id : 1),
+        student_name: (student && student.name) || (user && user.name) || 'Student',
+        roll_no: (student && student.roll_no) || 'N/A',
+        prn_no: cleanPrn || (student && student.prn_no) || 'N/A',
+        division_name: (student && student.division_name) || 'SE(ECE)-A',
+        batch_name: (student && student.batch_name) || 'A1',
+        student_email: cleanEmail || (student && student.email) || '',
+        requested_password: cleanPass,
+        status: 'PENDING',
+        created_at: new Date().toISOString()
+      };
+
+      db.password_requests = db.password_requests || [];
+      db.password_requests.unshift(newRequest);
+      saveLocalDB(db);
+
+      try {
+        fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/password_requests/' + reqId + '.json', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newRequest)
+        }).catch(() => {});
+      } catch (e) {}
+
+      return { success: true, message: 'Password reset request submitted successfully to HOD!' };
+    }
+
+    if (endpoint === '/api/hod/password-requests' && method === 'GET') {
+      if (!currentUser || (currentUser.role !== 'HOD' && currentUser.role !== 'TEACHER')) {
+        throw { message: 'Unauthorized access' };
+      }
+      return { requests: db.password_requests || [], success: true };
+    }
+
+    if (endpoint.startsWith('/api/hod/password-requests/') && endpoint.includes('/approve') && method === 'POST') {
+      if (!currentUser || (currentUser.role !== 'HOD' && currentUser.role !== 'TEACHER')) {
+        throw { message: 'Unauthorized access' };
+      }
+      const parts = endpoint.split('/');
+      const reqId = parts[4];
+      const reqItem = (db.password_requests || []).find(r => String(r.id) === String(reqId));
+      if (!reqItem) throw { message: 'Password request not found' };
+
+      reqItem.status = 'APPROVED';
+      reqItem.approved_at = new Date().toISOString();
+
+      const newPass = reqItem.requested_password || 'Student@123';
+      const stPrn = (reqItem.prn_no || '').trim().toUpperCase();
+      const stEmail = (reqItem.student_email || '').trim().toLowerCase();
+
+      (db.students || []).forEach(s => {
+        if (String(s.id) === String(reqItem.student_id) || (stPrn && stPrn !== 'N/A' && s.prn_no && s.prn_no.trim().toUpperCase() === stPrn) || (stEmail && stEmail.length > 3 && s.email && s.email.trim().toLowerCase() === stEmail)) {
+          s.password_hash = newPass;
+          s.is_activated = true;
+          s.must_change_credentials = false;
+        }
+      });
+
+      (db.users || []).forEach(u => {
+        if (String(u.id) === String(reqItem.student_id) || (stPrn && stPrn !== 'N/A' && u.prn_no && u.prn_no.trim().toUpperCase() === stPrn) || (stEmail && stEmail.length > 3 && u.email && u.email.trim().toLowerCase() === stEmail)) {
+          u.password_hash = newPass;
+          u.is_activated = true;
+          u.must_change_credentials = false;
+        }
+      });
+
+      saveLocalDB(db);
+
+      try {
+        fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/password_requests/' + reqId + '.json', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqItem)
+        }).catch(() => {});
+      } catch (e) {}
+
+      return { success: true, message: 'Password reset request approved & password updated!' };
+    }
+
+    if (endpoint.startsWith('/api/hod/password-requests/') && endpoint.includes('/reject') && method === 'POST') {
+      if (!currentUser || (currentUser.role !== 'HOD' && currentUser.role !== 'TEACHER')) {
+        throw { message: 'Unauthorized access' };
+      }
+      const parts = endpoint.split('/');
+      const reqId = parts[4];
+      const reqItem = (db.password_requests || []).find(r => String(r.id) === String(reqId));
+      if (!reqItem) throw { message: 'Password request not found' };
+
+      reqItem.status = 'REJECTED';
+      reqItem.rejection_reason = body.reason || 'Rejected by HOD';
+
+      saveLocalDB(db);
+
+      try {
+        fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/password_requests/' + reqId + '.json', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqItem)
+        }).catch(() => {});
+      } catch (e) {}
+
+      return { success: true, message: 'Password reset request rejected.' };
     }
 
     // 4. POST /api/student/setup-profile
