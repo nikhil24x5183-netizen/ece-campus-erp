@@ -12,4 +12,5 @@ shreyash/
 *.py
 !app.py
 !api/index.py
+!api/sync.py
 !database.py

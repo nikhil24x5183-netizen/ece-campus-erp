@@ -488,7 +488,20 @@ if (typeof firebase !== 'undefined' && firebase.initializeApp) {
 let g_cloudDB = null;
 
 function getLocalDB() {
-  if (g_cloudDB) return g_cloudDB;
+  if (g_cloudDB) {
+    const delSet = new Set(
+      (INITIAL_DB.deleted_student_ids || [])
+        .concat(g_cloudDB.deleted_student_ids || [])
+        .map(x => String(x).toUpperCase())
+    );
+    if (g_cloudDB.students) {
+      g_cloudDB.students = g_cloudDB.students.filter(s => s && !delSet.has(String(s.id).toUpperCase()) && (!s.prn_no || !delSet.has(String(s.prn_no).toUpperCase())));
+    }
+    if (g_cloudDB.users) {
+      g_cloudDB.users = g_cloudDB.users.filter(u => u && !delSet.has(String(u.id).toUpperCase()) && (!u.prn_no || !delSet.has(String(u.prn_no).toUpperCase())));
+    }
+    return g_cloudDB;
+  }
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (raw) {
@@ -504,13 +517,33 @@ function getLocalDB() {
     } catch (e) {}
   }
 
-  if (g_cloudDB && g_cloudDB.students) {
-    g_cloudDB.students.forEach(s => {
-      if (s.prn_no && (s.prn_no.startsWith('PRN-') || s.prn_no === 'N/A')) {
-        const initSt = (INITIAL_DB.students || []).find(x => x.roll_no == s.roll_no && x.division_name == s.division_name);
-        if (initSt && initSt.prn_no) s.prn_no = initSt.prn_no;
-      }
-    });
+  if (g_cloudDB) {
+    const delSet = new Set(
+      (INITIAL_DB.deleted_student_ids || [])
+        .concat(g_cloudDB.deleted_student_ids || [])
+        .map(x => String(x).toUpperCase())
+    );
+    g_cloudDB.deleted_student_ids = Array.from(delSet);
+    if (g_cloudDB.students) {
+      g_cloudDB.students = g_cloudDB.students.filter(s => {
+        if (!s) return false;
+        if (delSet.has(String(s.id).toUpperCase())) return false;
+        if (s.prn_no && delSet.has(String(s.prn_no).toUpperCase())) return false;
+        if (s.prn_no && (s.prn_no.startsWith('PRN-') || s.prn_no === 'N/A')) {
+          const initSt = (INITIAL_DB.students || []).find(x => x.roll_no == s.roll_no && x.division_name == s.division_name);
+          if (initSt && initSt.prn_no) s.prn_no = initSt.prn_no;
+        }
+        return true;
+      });
+    }
+    if (g_cloudDB.users) {
+      g_cloudDB.users = g_cloudDB.users.filter(u => {
+        if (!u) return false;
+        if (delSet.has(String(u.id).toUpperCase())) return false;
+        if (u.prn_no && delSet.has(String(u.prn_no).toUpperCase())) return false;
+        return true;
+      });
+    }
   }
   return g_cloudDB;
 }
@@ -626,9 +659,10 @@ function mergeDBs(localDb, cloudDb) {
   const merged = { ...INITIAL_DB, ...cloudDb };
 
   const deletedStudentIds = new Set(
-    (cloudDb.deleted_student_ids || [])
+    (INITIAL_DB.deleted_student_ids || [])
+      .concat(cloudDb.deleted_student_ids || [])
       .concat(localDb.deleted_student_ids || [])
-      .map(String)
+      .map(x => String(x).toUpperCase())
   );
 
   const deletedCertIds = new Set(
