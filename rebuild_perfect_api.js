@@ -449,10 +449,10 @@ const INITIAL_DB = {
   try {
     if (typeof localStorage !== 'undefined') {
       const currentReset = localStorage.getItem('ece_hard_reset_token');
-      if (currentReset !== 'v500000_official_faculty_roster') {
+      if (currentReset !== 'v600000_firebase_deleted_students_sync') {
         localStorage.clear();
         if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
-        localStorage.setItem('ece_hard_reset_token', 'v500000_official_faculty_roster');
+        localStorage.setItem('ece_hard_reset_token', 'v600000_firebase_deleted_students_sync');
         if (typeof document !== 'undefined' && document.cookie) {
           document.cookie.split(";").forEach(function(c) {
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
@@ -463,7 +463,7 @@ const INITIAL_DB = {
   } catch(e) {}
 })();
 
-const LOCAL_STORAGE_KEY = "ece_campus_db_v500000_official_faculty_roster";
+const LOCAL_STORAGE_KEY = "ece_campus_db_v600000_firebase_deleted_students_sync";
 
 // Google Firebase Realtime Database Configuration & Client
 const FIREBASE_CONFIG = {
@@ -582,6 +582,20 @@ function saveLocalDB(db) {
           });
         }
 
+        if (cleanCopy.deleted_student_ids && cleanCopy.deleted_student_ids.length > 0) {
+          fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/deleted_student_ids.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanCopy.deleted_student_ids)
+          }).catch(() => {});
+
+          cleanCopy.deleted_student_ids.forEach(delId => {
+            fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/activated_students/' + delId + '.json', {
+              method: 'DELETE'
+            }).catch(() => {});
+          });
+        }
+
         if (cleanCopy.timetable && cleanCopy.timetable.length > 0) {
           fetch('https://ece-campus-erp-default-rtdb.firebaseio.com/timetable.json', {
             method: 'PUT',
@@ -612,6 +626,12 @@ function mergeDBs(localDb, cloudDb) {
 
   const merged = { ...INITIAL_DB, ...cloudDb };
 
+  const deletedStudentIds = new Set(
+    (cloudDb.deleted_student_ids || [])
+      .concat(localDb.deleted_student_ids || [])
+      .map(String)
+  );
+
   const deletedCertIds = new Set(
     (cloudDb.deleted_cert_ids || [])
       .concat(localDb.deleted_cert_ids || [])
@@ -622,6 +642,10 @@ function mergeDBs(localDb, cloudDb) {
   const userMap = new Map();
   (INITIAL_DB.users || []).concat(localDb.users || []).concat(cloudDb.users || []).forEach(u => {
     if (!u) return;
+    const uid = String(u.id);
+    const uprn = u.prn_no ? String(u.prn_no).toUpperCase() : '';
+    if (deletedStudentIds.has(uid) || (uprn && deletedStudentIds.has(uprn))) return;
+
     const key = u.prn_no ? ('prn_' + u.prn_no.toUpperCase()) : (u.id ? ('uid_' + u.id) : (u.email ? ('email_' + u.email.toLowerCase()) : ('rand_' + Math.random())));
     if (!userMap.has(key)) {
       userMap.set(key, { ...u });
@@ -637,16 +661,28 @@ function mergeDBs(localDb, cloudDb) {
       if (u.prn_no && !u.prn_no.startsWith('PRN-')) ex.prn_no = u.prn_no;
     }
   });
-  merged.users = Array.from(userMap.values());
+  merged.users = Array.from(userMap.values()).filter(u => {
+    const uid = String(u.id);
+    const uprn = u.prn_no ? String(u.prn_no).toUpperCase() : '';
+    if (deletedStudentIds.has(uid) || (uprn && deletedStudentIds.has(uprn))) return false;
+    return true;
+  });
 
   // 2. Merge students
   const studentMap = new Map();
   (INITIAL_DB.students || []).forEach(s => {
+    const sid = String(s.id);
+    const sprn = s.prn_no ? String(s.prn_no).toUpperCase() : '';
+    if (deletedStudentIds.has(sid) || (sprn && deletedStudentIds.has(sprn))) return;
     studentMap.set(s.prn_no ? s.prn_no.toUpperCase() : (s.division_id + '_' + s.roll_no), { ...s });
   });
 
   (localDb.students || []).concat(cloudDb.students || []).forEach(s => {
     if (!s) return;
+    const sid = String(s.id);
+    const sprn = s.prn_no ? String(s.prn_no).toUpperCase() : '';
+    if (deletedStudentIds.has(sid) || (sprn && deletedStudentIds.has(sprn))) return;
+
     const key = s.prn_no ? s.prn_no.toUpperCase() : ((s.division_id || 1) + '_' + s.roll_no);
     const ex = studentMap.get(key);
     if (ex) {
@@ -658,7 +694,13 @@ function mergeDBs(localDb, cloudDb) {
       if (s.prn_no && !s.prn_no.startsWith('PRN-')) ex.prn_no = s.prn_no;
     }
   });
-  merged.students = Array.from(studentMap.values());
+  merged.students = Array.from(studentMap.values()).filter(s => {
+    const sid = String(s.id);
+    const sprn = s.prn_no ? String(s.prn_no).toUpperCase() : '';
+    if (deletedStudentIds.has(sid) || (sprn && deletedStudentIds.has(sprn))) return false;
+    return true;
+  });
+  merged.deleted_student_ids = Array.from(deletedStudentIds);
 
   // 3. Merge certificates strictly by unique ID & filter out deleted certificates
   const certMap = new Map();
