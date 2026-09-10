@@ -6042,12 +6042,26 @@ const API = {
     // 1. GET /api/auth/me
     if (endpoint === '/api/auth/me' && method === 'GET') {
       if (!currentUser) throw { message: 'Not authenticated' };
-      const student = findCurrentStudent(db, currentUser);
-      if (currentUser.role === 'HOD' || currentUser.role === 'TEACHER') {
-        const teacher = (db.teachers || []).find(t => (currentUser.id && t.user_id == currentUser.id) || (currentUser.email && t.email && t.email.toLowerCase() === currentUser.email.toLowerCase()));
-        return { user: currentUser, profile: teacher || (db.teachers || [])[0] || { name: 'Dr. Dhanashree Kulkarni' } };
+
+      const validUser = (db.users || []).find(u => {
+        if (!u) return false;
+        if (currentUser.id && u.id && String(u.id) === String(currentUser.id)) return true;
+        if (currentUser.prn_no && u.prn_no && u.prn_no.toUpperCase() === currentUser.prn_no.toUpperCase()) return true;
+        if (currentUser.email && u.email && u.email.toLowerCase() === currentUser.email.toLowerCase()) return true;
+        return false;
+      });
+
+      if (!validUser) {
+        setSessionUser(null);
+        throw { message: 'Account no longer exists or was removed by HOD. Please log in again.' };
       }
-      return { user: currentUser, profile: student || currentUser };
+
+      const student = findCurrentStudent(db, validUser);
+      if (validUser.role === 'HOD' || validUser.role === 'TEACHER') {
+        const teacher = (db.teachers || []).find(t => (validUser.id && t.user_id == validUser.id) || (validUser.email && t.email && t.email.toLowerCase() === validUser.email.toLowerCase()));
+        return { user: validUser, profile: teacher || (db.teachers || [])[0] || { name: 'Dr. Dhanashree Kulkarni' } };
+      }
+      return { user: validUser, profile: student || validUser };
     }
 
     // 2. POST /api/auth/login
@@ -6632,6 +6646,29 @@ const API = {
 
     if (endpoint.startsWith('/api/hod/students/') && method === 'DELETE') {
       const studentId = endpoint.split('/').pop();
+      const st = (db.students || []).find(s => String(s.id) === String(studentId) || (s.prn_no && String(s.prn_no) === String(studentId)));
+      if (st) {
+        const targetUserId = st.user_id || st.id;
+        const targetPrn = st.prn_no;
+
+        db.users = (db.users || []).filter(u => {
+          if (!u) return false;
+          if (targetUserId && String(u.id) === String(targetUserId)) return false;
+          if (targetPrn && u.prn_no && u.prn_no.toUpperCase() === targetPrn.toUpperCase()) return false;
+          return true;
+        });
+
+        db.students = (db.students || []).filter(s => {
+          if (!s) return false;
+          if (String(s.id) === String(studentId)) return false;
+          if (targetPrn && s.prn_no && s.prn_no.toUpperCase() === targetPrn.toUpperCase()) return false;
+          return true;
+        });
+
+        saveLocalDB(db);
+        return { success: true, message: 'Student removed successfully and session revoked' };
+      }
+
       db.students = (db.students || []).filter(s => String(s.id) !== String(studentId));
       saveLocalDB(db);
       return { success: true, message: 'Student removed' };
