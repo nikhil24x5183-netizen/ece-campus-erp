@@ -4743,6 +4743,7 @@ const INITIAL_DB = {
 ],
   certificates: [],
   deleted_cert_ids: [],
+  deleted_student_ids: [],
   activity_records: [],
   activity_subjects: [],
   password_requests: [],

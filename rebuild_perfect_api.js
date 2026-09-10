@@ -427,6 +427,7 @@ const INITIAL_DB = {
   students: ` + JSON.stringify(students, null, 2) + `,
   certificates: [],
   deleted_cert_ids: [],
+  deleted_student_ids: [],
   activity_records: [],
   activity_subjects: [],
   password_requests: [],

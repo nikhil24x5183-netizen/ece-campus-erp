@@ -651,13 +651,28 @@ const HodView = {
     } catch (e) { return; }
 
     try {
-      Toast.info('Deleting student and all associated records...');
+      Toast.info('Deleting student and revoking session...');
       const res = await API.del(`/api/hod/students/${id}`);
-      Toast.success(res.message || 'Student deleted.');
-      // Sync deletion to cloud immediately
-      if (typeof pushToCloud === 'function') { try { await pushToCloud(); } catch(e) {} }
+
+      // Immediately purge from local db object
+      const db = typeof getLocalDB === 'function' ? getLocalDB() : { students: [], users: [] };
+      const targetSt = (db.students || []).find(s => String(s.id) === String(id));
+      const targetPrn = targetSt ? targetSt.prn_no : null;
+
+      db.deleted_student_ids = db.deleted_student_ids || [];
+      if (!db.deleted_student_ids.includes(String(id))) db.deleted_student_ids.push(String(id));
+      if (targetPrn && !db.deleted_student_ids.includes(targetPrn.toUpperCase())) db.deleted_student_ids.push(targetPrn.toUpperCase());
+
+      db.students = (db.students || []).filter(s => String(s.id) !== String(id) && (!targetPrn || !s.prn_no || s.prn_no.toUpperCase() !== targetPrn.toUpperCase()));
+      db.users = (db.users || []).filter(u => String(u.id) !== String(id) && (!targetPrn || !u.prn_no || u.prn_no.toUpperCase() !== targetPrn.toUpperCase()));
+
+      if (typeof saveLocalDB === 'function') saveLocalDB(db);
+
+      Toast.success(res.message || 'Student permanently deleted.');
       const container = document.getElementById('view-container');
-      container.innerHTML = await HodView.renderStudents();
+      if (container) {
+        container.innerHTML = await HodView.renderStudents();
+      }
     } catch (err) {
       Toast.error((err && err.message) || 'Failed to delete student.');
     }
