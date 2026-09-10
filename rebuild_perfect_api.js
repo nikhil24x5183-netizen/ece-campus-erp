@@ -68,7 +68,6 @@ const div_a_raw = [
 const div_b_raw = [
   [1, "U251H002", "ANAND SHINDALKAR MARUTI"],
   [2, "U251H005", "ARAS MANGESH MAHESH"],
-  [3, "U251H007", "AWADHWAL NIKHIL MUKESH"],
   [4, "U251H008", "BACCHEWAR SANCHITA SANTOSH"],
   [5, "U251H011", "BHAMBERE TANISH CHANDU"],
   [6, "U251H012", "BHARANE NIKITA SURESH"],
@@ -117,7 +116,6 @@ const div_b_raw = [
   [50, "U251H100", "SATHE BHARGAV YOGESH"],
   [51, "U251H102", "SHINDE AMEY NAVNATH"],
   [52, "U251H104", "SHINDE RITU DATTATRAY"],
-  [53, "U251H106", "SHREYASH NITIN KHAJEKAR"],
   [54, "U251H108", "SHUBHAM SHRISHAIL BOLAKOTAGI"],
   [55, "U251H110", "SONONE KOMAL SURESH"],
   [56, "U251H112", "SUNDARAM SANJAY PATHAK"],
@@ -427,7 +425,7 @@ const INITIAL_DB = {
   students: ` + JSON.stringify(students, null, 2) + `,
   certificates: [],
   deleted_cert_ids: [],
-  deleted_student_ids: [],
+  deleted_student_ids: ["U251H007", "U251H106", "3", "53"],
   activity_records: [],
   activity_subjects: [],
   password_requests: [],
@@ -450,10 +448,10 @@ const INITIAL_DB = {
   try {
     if (typeof localStorage !== 'undefined') {
       const currentReset = localStorage.getItem('ece_hard_reset_token');
-      if (currentReset !== 'v600000_firebase_deleted_students_sync') {
+      if (currentReset !== 'v700000_purge_nikhil_shreyash') {
         localStorage.clear();
         if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
-        localStorage.setItem('ece_hard_reset_token', 'v600000_firebase_deleted_students_sync');
+        localStorage.setItem('ece_hard_reset_token', 'v700000_purge_nikhil_shreyash');
         if (typeof document !== 'undefined' && document.cookie) {
           document.cookie.split(";").forEach(function(c) {
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
@@ -464,7 +462,7 @@ const INITIAL_DB = {
   } catch(e) {}
 })();
 
-const LOCAL_STORAGE_KEY = "ece_campus_db_v600000_firebase_deleted_students_sync";
+const LOCAL_STORAGE_KEY = "ece_campus_db_v700000_purge_nikhil_shreyash";
 
 // Google Firebase Realtime Database Configuration & Client
 const FIREBASE_CONFIG = {
