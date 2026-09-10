@@ -1257,6 +1257,24 @@ const INITIAL_DB = {
   {
     "id": 72,
     "email": "",
+    "username": "U251H007",
+    "prn_no": "U251H007",
+    "roll_no": "03",
+    "division_id": 2,
+    "batch_id": 4,
+    "division_name": "SE(ECE)-B",
+    "batch_name": "B1",
+    "password_hash": "Student@123",
+    "role": "STUDENT",
+    "name": "AWADHWAL NIKHIL MUKESH",
+    "status": "APPROVED",
+    "is_activated": false,
+    "must_change_credentials": true,
+    "is_logged_in": false
+  },
+  {
+    "id": 73,
+    "email": "",
     "username": "U251H008",
     "prn_no": "U251H008",
     "roll_no": "04",
@@ -1273,7 +1291,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 73,
+    "id": 74,
     "email": "",
     "username": "U251H011",
     "prn_no": "U251H011",
@@ -1291,7 +1309,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 74,
+    "id": 75,
     "email": "",
     "username": "U251H012",
     "prn_no": "U251H012",
@@ -1309,7 +1327,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 75,
+    "id": 76,
     "email": "",
     "username": "U251H015",
     "prn_no": "U251H015",
@@ -1327,7 +1345,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 76,
+    "id": 77,
     "email": "",
     "username": "U251H016",
     "prn_no": "U251H016",
@@ -1345,7 +1363,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 77,
+    "id": 78,
     "email": "",
     "username": "U251H019",
     "prn_no": "U251H019",
@@ -1363,7 +1381,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 78,
+    "id": 79,
     "email": "",
     "username": "U251H021",
     "prn_no": "U251H021",
@@ -1381,7 +1399,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 79,
+    "id": 80,
     "email": "",
     "username": "U251H023",
     "prn_no": "U251H023",
@@ -1399,7 +1417,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 80,
+    "id": 81,
     "email": "",
     "username": "U251H024",
     "prn_no": "U251H024",
@@ -1417,7 +1435,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 81,
+    "id": 82,
     "email": "",
     "username": "U251H027",
     "prn_no": "U251H027",
@@ -1435,7 +1453,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 82,
+    "id": 83,
     "email": "",
     "username": "U251H028",
     "prn_no": "U251H028",
@@ -1453,7 +1471,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 83,
+    "id": 84,
     "email": "",
     "username": "U251H031",
     "prn_no": "U251H031",
@@ -1471,7 +1489,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 84,
+    "id": 85,
     "email": "",
     "username": "U251H033",
     "prn_no": "U251H033",
@@ -1489,7 +1507,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 85,
+    "id": 86,
     "email": "",
     "username": "U251H034",
     "prn_no": "U251H034",
@@ -1507,7 +1525,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 86,
+    "id": 87,
     "email": "",
     "username": "U251H037",
     "prn_no": "U251H037",
@@ -1525,7 +1543,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 87,
+    "id": 88,
     "email": "",
     "username": "U251H039",
     "prn_no": "U251H039",
@@ -1543,7 +1561,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 88,
+    "id": 89,
     "email": "",
     "username": "U251H041",
     "prn_no": "U251H041",
@@ -1561,7 +1579,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 89,
+    "id": 90,
     "email": "",
     "username": "U251H043",
     "prn_no": "U251H043",
@@ -1579,7 +1597,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 90,
+    "id": 91,
     "email": "",
     "username": "U251H045",
     "prn_no": "U251H045",
@@ -1597,7 +1615,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 91,
+    "id": 92,
     "email": "",
     "username": "U251H047",
     "prn_no": "U251H047",
@@ -1615,7 +1633,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 92,
+    "id": 93,
     "email": "",
     "username": "U251H050",
     "prn_no": "U251H050",
@@ -1633,7 +1651,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 93,
+    "id": 94,
     "email": "",
     "username": "U251H052",
     "prn_no": "U251H052",
@@ -1651,7 +1669,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 94,
+    "id": 95,
     "email": "",
     "username": "U251H053",
     "prn_no": "U251H053",
@@ -1669,7 +1687,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 95,
+    "id": 96,
     "email": "",
     "username": "U251H055",
     "prn_no": "U251H055",
@@ -1687,7 +1705,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 96,
+    "id": 97,
     "email": "",
     "username": "U251H058",
     "prn_no": "U251H058",
@@ -1705,7 +1723,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 97,
+    "id": 98,
     "email": "",
     "username": "U251H059",
     "prn_no": "U251H059",
@@ -1723,7 +1741,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 98,
+    "id": 99,
     "email": "",
     "username": "U251H061",
     "prn_no": "U251H061",
@@ -1741,7 +1759,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 99,
+    "id": 100,
     "email": "",
     "username": "U251H063",
     "prn_no": "U251H063",
@@ -1759,7 +1777,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 100,
+    "id": 101,
     "email": "",
     "username": "U251H066",
     "prn_no": "U251H066",
@@ -1777,7 +1795,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 101,
+    "id": 102,
     "email": "",
     "username": "U251H068",
     "prn_no": "U251H068",
@@ -1795,7 +1813,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 102,
+    "id": 103,
     "email": "",
     "username": "U251H069",
     "prn_no": "U251H069",
@@ -1813,7 +1831,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 103,
+    "id": 104,
     "email": "",
     "username": "U251H071",
     "prn_no": "U251H071",
@@ -1831,7 +1849,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 104,
+    "id": 105,
     "email": "",
     "username": "U251H074",
     "prn_no": "U251H074",
@@ -1849,7 +1867,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 105,
+    "id": 106,
     "email": "",
     "username": "U251H075",
     "prn_no": "U251H075",
@@ -1867,7 +1885,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 106,
+    "id": 107,
     "email": "",
     "username": "U251H078",
     "prn_no": "U251H078",
@@ -1885,7 +1903,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 107,
+    "id": 108,
     "email": "",
     "username": "U251H081",
     "prn_no": "U251H081",
@@ -1903,7 +1921,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 108,
+    "id": 109,
     "email": "",
     "username": "U251H082",
     "prn_no": "U251H082",
@@ -1921,7 +1939,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 109,
+    "id": 110,
     "email": "",
     "username": "U251H084",
     "prn_no": "U251H084",
@@ -1939,7 +1957,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 110,
+    "id": 111,
     "email": "",
     "username": "U251H086",
     "prn_no": "U251H086",
@@ -1957,7 +1975,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 111,
+    "id": 112,
     "email": "",
     "username": "U251H087",
     "prn_no": "U251H087",
@@ -1975,7 +1993,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 112,
+    "id": 113,
     "email": "",
     "username": "U251H090",
     "prn_no": "U251H090",
@@ -1993,7 +2011,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 113,
+    "id": 114,
     "email": "",
     "username": "U251H092",
     "prn_no": "U251H092",
@@ -2011,7 +2029,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 114,
+    "id": 115,
     "email": "",
     "username": "U251H093",
     "prn_no": "U251H093",
@@ -2029,7 +2047,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 115,
+    "id": 116,
     "email": "",
     "username": "U251H095",
     "prn_no": "U251H095",
@@ -2047,7 +2065,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 116,
+    "id": 117,
     "email": "",
     "username": "U251H098",
     "prn_no": "U251H098",
@@ -2065,7 +2083,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 117,
+    "id": 118,
     "email": "",
     "username": "U251H100",
     "prn_no": "U251H100",
@@ -2083,7 +2101,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 118,
+    "id": 119,
     "email": "",
     "username": "U251H102",
     "prn_no": "U251H102",
@@ -2101,7 +2119,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 119,
+    "id": 120,
     "email": "",
     "username": "U251H104",
     "prn_no": "U251H104",
@@ -2119,7 +2137,25 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 120,
+    "id": 121,
+    "email": "",
+    "username": "U251H106",
+    "prn_no": "U251H106",
+    "roll_no": "53",
+    "division_id": 2,
+    "batch_id": 6,
+    "division_name": "SE(ECE)-B",
+    "batch_name": "B3",
+    "password_hash": "Student@123",
+    "role": "STUDENT",
+    "name": "SHREYASH NITIN KHAJEKAR",
+    "status": "APPROVED",
+    "is_activated": false,
+    "must_change_credentials": true,
+    "is_logged_in": false
+  },
+  {
+    "id": 122,
     "email": "",
     "username": "U251H108",
     "prn_no": "U251H108",
@@ -2137,7 +2173,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 121,
+    "id": 123,
     "email": "",
     "username": "U251H110",
     "prn_no": "U251H110",
@@ -2155,7 +2191,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 122,
+    "id": 124,
     "email": "",
     "username": "U251H112",
     "prn_no": "U251H112",
@@ -2173,7 +2209,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 123,
+    "id": 125,
     "email": "",
     "username": "U251H113",
     "prn_no": "U251H113",
@@ -2191,7 +2227,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 124,
+    "id": 126,
     "email": "",
     "username": "U251H115",
     "prn_no": "U251H115",
@@ -2209,7 +2245,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 125,
+    "id": 127,
     "email": "",
     "username": "U251H118",
     "prn_no": "U251H118",
@@ -2227,7 +2263,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 126,
+    "id": 128,
     "email": "",
     "username": "U251H119",
     "prn_no": "U251H119",
@@ -2245,7 +2281,7 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 127,
+    "id": 129,
     "email": "",
     "username": "U251H121",
     "prn_no": "U251H121",
@@ -3547,6 +3583,26 @@ const INITIAL_DB = {
   {
     "id": 70,
     "user_id": 72,
+    "name": "AWADHWAL NIKHIL MUKESH",
+    "roll_no": "03",
+    "prn_no": "U251H007",
+    "username": "U251H007",
+    "department_id": 1,
+    "semester_id": 1,
+    "division_id": 2,
+    "batch_id": 4,
+    "division_name": "SE(ECE)-B",
+    "batch_name": "B1",
+    "email": "",
+    "password_hash": "Student@123",
+    "status": "APPROVED",
+    "is_activated": false,
+    "must_change_credentials": true,
+    "is_logged_in": false
+  },
+  {
+    "id": 71,
+    "user_id": 73,
     "name": "BACCHEWAR SANCHITA SANTOSH",
     "roll_no": "04",
     "prn_no": "U251H008",
@@ -3565,8 +3621,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 71,
-    "user_id": 73,
+    "id": 72,
+    "user_id": 74,
     "name": "BHAMBERE TANISH CHANDU",
     "roll_no": "05",
     "prn_no": "U251H011",
@@ -3585,8 +3641,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 72,
-    "user_id": 74,
+    "id": 73,
+    "user_id": 75,
     "name": "BHARANE NIKITA SURESH",
     "roll_no": "06",
     "prn_no": "U251H012",
@@ -3605,8 +3661,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 73,
-    "user_id": 75,
+    "id": 74,
+    "user_id": 76,
     "name": "BHISE SANSKRUTI VISHWAS",
     "roll_no": "07",
     "prn_no": "U251H015",
@@ -3625,8 +3681,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 74,
-    "user_id": 76,
+    "id": 75,
+    "user_id": 77,
     "name": "BHOSLE PRATHMESH RAMESH",
     "roll_no": "08",
     "prn_no": "U251H016",
@@ -3645,8 +3701,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 75,
-    "user_id": 77,
+    "id": 76,
+    "user_id": 78,
     "name": "BONDAR SHIVAM NANASAHEB",
     "roll_no": "09",
     "prn_no": "U251H019",
@@ -3665,8 +3721,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 76,
-    "user_id": 78,
+    "id": 77,
+    "user_id": 79,
     "name": "CHAUDHARI PRAJWAL MANOJ",
     "roll_no": "10",
     "prn_no": "U251H021",
@@ -3685,8 +3741,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 77,
-    "user_id": 79,
+    "id": 78,
+    "user_id": 80,
     "name": "DAMKONDWAR RITIKA LAXMAN",
     "roll_no": "11",
     "prn_no": "U251H023",
@@ -3705,8 +3761,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 78,
-    "user_id": 80,
+    "id": 79,
+    "user_id": 81,
     "name": "DARSHAN SANTOSH GHUNAWAT",
     "roll_no": "12",
     "prn_no": "U251H024",
@@ -3725,8 +3781,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 79,
-    "user_id": 81,
+    "id": 80,
+    "user_id": 82,
     "name": "DESHPANDE MADHURA SANJAY",
     "roll_no": "13",
     "prn_no": "U251H027",
@@ -3745,8 +3801,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 80,
-    "user_id": 82,
+    "id": 81,
+    "user_id": 83,
     "name": "DEVANG RITESH JITENDRA",
     "roll_no": "14",
     "prn_no": "U251H028",
@@ -3765,8 +3821,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 81,
-    "user_id": 83,
+    "id": 82,
+    "user_id": 84,
     "name": "DURANDE GITANJALI AMOL",
     "roll_no": "15",
     "prn_no": "U251H031",
@@ -3785,8 +3841,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 82,
-    "user_id": 84,
+    "id": 83,
+    "user_id": 85,
     "name": "GATE VAISHNAVI KAILAS",
     "roll_no": "16",
     "prn_no": "U251H033",
@@ -3805,8 +3861,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 83,
-    "user_id": 85,
+    "id": 84,
+    "user_id": 86,
     "name": "GAURAV RAMDAS BHUJBAL",
     "roll_no": "17",
     "prn_no": "U251H034",
@@ -3825,8 +3881,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 84,
-    "user_id": 86,
+    "id": 85,
+    "user_id": 87,
     "name": "GHARE SUSHANT PANDURANG",
     "roll_no": "18",
     "prn_no": "U251H037",
@@ -3845,8 +3901,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 85,
-    "user_id": 87,
+    "id": 86,
+    "user_id": 88,
     "name": "GIRASE JAYESH DAGESING",
     "roll_no": "19",
     "prn_no": "U251H039",
@@ -3865,8 +3921,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 86,
-    "user_id": 88,
+    "id": 87,
+    "user_id": 89,
     "name": "ISHAAN MILIND PARULEKAR",
     "roll_no": "20",
     "prn_no": "U251H041",
@@ -3885,8 +3941,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 87,
-    "user_id": 89,
+    "id": 88,
+    "user_id": 90,
     "name": "JADHAV PRANAV LAXMAN",
     "roll_no": "22",
     "prn_no": "U251H043",
@@ -3905,8 +3961,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 88,
-    "user_id": 90,
+    "id": 89,
+    "user_id": 91,
     "name": "JANGALE KANISHKA KUNDAN",
     "roll_no": "23",
     "prn_no": "U251H045",
@@ -3925,8 +3981,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 89,
-    "user_id": 91,
+    "id": 90,
+    "user_id": 92,
     "name": "JEER SUNSHRIYA HEMANT",
     "roll_no": "24",
     "prn_no": "U251H047",
@@ -3945,8 +4001,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 90,
-    "user_id": 92,
+    "id": 91,
+    "user_id": 93,
     "name": "KALGUNDE ATHARVA SANTOSH",
     "roll_no": "25",
     "prn_no": "U251H050",
@@ -3965,8 +4021,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 91,
-    "user_id": 93,
+    "id": 92,
+    "user_id": 94,
     "name": "KEDAR SUHANI RAMHARI",
     "roll_no": "26",
     "prn_no": "U251H052",
@@ -3985,8 +4041,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 92,
-    "user_id": 94,
+    "id": 93,
+    "user_id": 95,
     "name": "KEYUR SHAMDEV RAGHORTE",
     "roll_no": "27",
     "prn_no": "U251H053",
@@ -4005,8 +4061,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 93,
-    "user_id": 95,
+    "id": 94,
+    "user_id": 96,
     "name": "KOLE SANJAY BALAJI",
     "roll_no": "28",
     "prn_no": "U251H055",
@@ -4025,8 +4081,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 94,
-    "user_id": 96,
+    "id": 95,
+    "user_id": 97,
     "name": "KUMBHAR SARTHAK SACHIN",
     "roll_no": "29",
     "prn_no": "U251H058",
@@ -4045,8 +4101,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 95,
-    "user_id": 97,
+    "id": 96,
+    "user_id": 98,
     "name": "LINGADE ANUSHKA VISHAL",
     "roll_no": "30",
     "prn_no": "U251H059",
@@ -4065,8 +4121,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 96,
-    "user_id": 98,
+    "id": 97,
+    "user_id": 99,
     "name": "MALI MOKSHADA RAMESH",
     "roll_no": "31",
     "prn_no": "U251H061",
@@ -4085,8 +4141,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 97,
-    "user_id": 99,
+    "id": 98,
+    "user_id": 100,
     "name": "MANOJ DNYANOBA HALLE",
     "roll_no": "32",
     "prn_no": "U251H063",
@@ -4105,8 +4161,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 98,
-    "user_id": 100,
+    "id": 99,
+    "user_id": 101,
     "name": "MOHIT MODARAM CHOUDHARY",
     "roll_no": "33",
     "prn_no": "U251H066",
@@ -4125,8 +4181,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 99,
-    "user_id": 101,
+    "id": 100,
+    "user_id": 102,
     "name": "MORE DIVESH SUNIL",
     "roll_no": "34",
     "prn_no": "U251H068",
@@ -4145,8 +4201,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 100,
-    "user_id": 102,
+    "id": 101,
+    "user_id": 103,
     "name": "MUJMULE SAMIKSHA PRADIP",
     "roll_no": "35",
     "prn_no": "U251H069",
@@ -4165,8 +4221,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 101,
-    "user_id": 103,
+    "id": 102,
+    "user_id": 104,
     "name": "NAIR ARAVIND PRASANTH",
     "roll_no": "36",
     "prn_no": "U251H071",
@@ -4185,8 +4241,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 102,
-    "user_id": 104,
+    "id": 103,
+    "user_id": 105,
     "name": "NEWARE SHREYASH PRAMOD",
     "roll_no": "37",
     "prn_no": "U251H074",
@@ -4205,8 +4261,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 103,
-    "user_id": 105,
+    "id": 104,
+    "user_id": 106,
     "name": "NIKAM PAYAL SURESH",
     "roll_no": "38",
     "prn_no": "U251H075",
@@ -4225,8 +4281,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 104,
-    "user_id": 106,
+    "id": 105,
+    "user_id": 107,
     "name": "NIMJE YASH ASHOKRAO",
     "roll_no": "39",
     "prn_no": "U251H078",
@@ -4245,8 +4301,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 105,
-    "user_id": 107,
+    "id": 106,
+    "user_id": 108,
     "name": "OM VILAS RAUT",
     "roll_no": "40",
     "prn_no": "U251H081",
@@ -4265,8 +4321,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 106,
-    "user_id": 108,
+    "id": 107,
+    "user_id": 109,
     "name": "OVHAL PRANALI GANESH",
     "roll_no": "41",
     "prn_no": "U251H082",
@@ -4285,8 +4341,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 107,
-    "user_id": 109,
+    "id": 108,
+    "user_id": 110,
     "name": "PATIL MANISH MANOHAR",
     "roll_no": "42",
     "prn_no": "U251H084",
@@ -4305,8 +4361,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 108,
-    "user_id": 110,
+    "id": 109,
+    "user_id": 111,
     "name": "PAWAR SIDDHI LAXMAN",
     "roll_no": "43",
     "prn_no": "U251H086",
@@ -4325,8 +4381,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 109,
-    "user_id": 111,
+    "id": 110,
+    "user_id": 112,
     "name": "PRANAV AMIT SAHASRABUDDHE",
     "roll_no": "44",
     "prn_no": "U251H087",
@@ -4345,8 +4401,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 110,
-    "user_id": 112,
+    "id": 111,
+    "user_id": 113,
     "name": "PUJARI MITESH RAKESH",
     "roll_no": "45",
     "prn_no": "U251H090",
@@ -4365,8 +4421,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 111,
-    "user_id": 113,
+    "id": 112,
+    "user_id": 114,
     "name": "RAJPUT SURYADEVSING BHARATSING",
     "roll_no": "46",
     "prn_no": "U251H092",
@@ -4385,8 +4441,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 112,
-    "user_id": 114,
+    "id": 113,
+    "user_id": 115,
     "name": "RAKSHE VAISHNAVI KUNDLIK",
     "roll_no": "47",
     "prn_no": "U251H093",
@@ -4405,8 +4461,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 113,
-    "user_id": 115,
+    "id": 114,
+    "user_id": 116,
     "name": "RANE SHRUTI NANDKISHOR",
     "roll_no": "48",
     "prn_no": "U251H095",
@@ -4425,8 +4481,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 114,
-    "user_id": 116,
+    "id": 115,
+    "user_id": 117,
     "name": "SANER SAKSHI NILESH",
     "roll_no": "49",
     "prn_no": "U251H098",
@@ -4445,8 +4501,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 115,
-    "user_id": 117,
+    "id": 116,
+    "user_id": 118,
     "name": "SATHE BHARGAV YOGESH",
     "roll_no": "50",
     "prn_no": "U251H100",
@@ -4465,8 +4521,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 116,
-    "user_id": 118,
+    "id": 117,
+    "user_id": 119,
     "name": "SHINDE AMEY NAVNATH",
     "roll_no": "51",
     "prn_no": "U251H102",
@@ -4485,8 +4541,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 117,
-    "user_id": 119,
+    "id": 118,
+    "user_id": 120,
     "name": "SHINDE RITU DATTATRAY",
     "roll_no": "52",
     "prn_no": "U251H104",
@@ -4505,8 +4561,28 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 118,
-    "user_id": 120,
+    "id": 119,
+    "user_id": 121,
+    "name": "SHREYASH NITIN KHAJEKAR",
+    "roll_no": "53",
+    "prn_no": "U251H106",
+    "username": "U251H106",
+    "department_id": 1,
+    "semester_id": 1,
+    "division_id": 2,
+    "batch_id": 6,
+    "division_name": "SE(ECE)-B",
+    "batch_name": "B3",
+    "email": "",
+    "password_hash": "Student@123",
+    "status": "APPROVED",
+    "is_activated": false,
+    "must_change_credentials": true,
+    "is_logged_in": false
+  },
+  {
+    "id": 120,
+    "user_id": 122,
     "name": "SHUBHAM SHRISHAIL BOLAKOTAGI",
     "roll_no": "54",
     "prn_no": "U251H108",
@@ -4525,8 +4601,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 119,
-    "user_id": 121,
+    "id": 121,
+    "user_id": 123,
     "name": "SONONE KOMAL SURESH",
     "roll_no": "55",
     "prn_no": "U251H110",
@@ -4545,8 +4621,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 120,
-    "user_id": 122,
+    "id": 122,
+    "user_id": 124,
     "name": "SUNDARAM SANJAY PATHAK",
     "roll_no": "56",
     "prn_no": "U251H112",
@@ -4565,8 +4641,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 121,
-    "user_id": 123,
+    "id": 123,
+    "user_id": 125,
     "name": "TAKALE SARTHAK SACHIN",
     "roll_no": "57",
     "prn_no": "U251H113",
@@ -4585,8 +4661,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 122,
-    "user_id": 124,
+    "id": 124,
+    "user_id": 126,
     "name": "THIGALE SIDDHI KAILAS",
     "roll_no": "58",
     "prn_no": "U251H115",
@@ -4605,8 +4681,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 123,
-    "user_id": 125,
+    "id": 125,
+    "user_id": 127,
     "name": "TONDARE SAKSHI BASAWRAJ",
     "roll_no": "59",
     "prn_no": "U251H118",
@@ -4625,8 +4701,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 124,
-    "user_id": 126,
+    "id": 126,
+    "user_id": 128,
     "name": "TONGALE KETAN MURLIDHAR",
     "roll_no": "60",
     "prn_no": "U251H119",
@@ -4645,8 +4721,8 @@ const INITIAL_DB = {
     "is_logged_in": false
   },
   {
-    "id": 125,
-    "user_id": 127,
+    "id": 127,
+    "user_id": 129,
     "name": "WAYAL PIYUSH SHASHIKANT",
     "roll_no": "61",
     "prn_no": "U251H121",
@@ -4667,7 +4743,7 @@ const INITIAL_DB = {
 ],
   certificates: [],
   deleted_cert_ids: [],
-  deleted_student_ids: ["U251H007", "U251H106", "3", "53"],
+  deleted_student_ids: [],
   activity_records: [],
   activity_subjects: [],
   password_requests: [],
@@ -5539,10 +5615,10 @@ const INITIAL_DB = {
   try {
     if (typeof localStorage !== 'undefined') {
       const currentReset = localStorage.getItem('ece_hard_reset_token');
-      if (currentReset !== 'v700000_purge_nikhil_shreyash') {
+      if (currentReset !== 'v900000_fresh_login_nikhil_shreyash') {
         localStorage.clear();
         if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
-        localStorage.setItem('ece_hard_reset_token', 'v700000_purge_nikhil_shreyash');
+        localStorage.setItem('ece_hard_reset_token', 'v900000_fresh_login_nikhil_shreyash');
         if (typeof document !== 'undefined' && document.cookie) {
           document.cookie.split(";").forEach(function(c) {
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
@@ -5553,7 +5629,7 @@ const INITIAL_DB = {
   } catch(e) {}
 })();
 
-const LOCAL_STORAGE_KEY = "ece_campus_db_v700000_purge_nikhil_shreyash";
+const LOCAL_STORAGE_KEY = "ece_campus_db_v900000_fresh_login_nikhil_shreyash";
 
 // Google Firebase Realtime Database Configuration & Client
 const FIREBASE_CONFIG = {

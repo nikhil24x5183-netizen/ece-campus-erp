@@ -6,13 +6,136 @@ true = True
 false = False
 null = None
 
-TMP_DB_PATH = "/tmp/campus_db_v700000.json"
+TMP_DB_PATH = "/tmp/campus_db_v900000.json"
 
 INITIAL_DB_STATE = {
+    "departments": [
+        {
+            "id": 1,
+            "name": "Electronics & Communication Engineering",
+            "code": "ECE"
+        }
+    ],
+    "semesters": [
+        {
+            "id": 1,
+            "department_id": 1,
+            "semester_number": 3,
+            "academic_year": "2026-2027"
+        }
+    ],
+    "divisions": [
+        {
+            "id": 1,
+            "semester_id": 1,
+            "name": "SE(ECE)-A",
+            "capacity": 62
+        },
+        {
+            "id": 2,
+            "semester_id": 1,
+            "name": "SE(ECE)-B",
+            "capacity": 60
+        }
+    ],
+    "batches": [
+        {
+            "id": 1,
+            "division_id": 1,
+            "name": "A1"
+        },
+        {
+            "id": 2,
+            "division_id": 1,
+            "name": "A2"
+        },
+        {
+            "id": 3,
+            "division_id": 1,
+            "name": "A3"
+        },
+        {
+            "id": 4,
+            "division_id": 2,
+            "name": "B1"
+        },
+        {
+            "id": 5,
+            "division_id": 2,
+            "name": "B2"
+        },
+        {
+            "id": 6,
+            "division_id": 2,
+            "name": "B3"
+        }
+    ],
+    "time_slots": [
+        {
+            "id": 1,
+            "start_time": "08:30",
+            "end_time": "09:30",
+            "label": "08.30 TO 09.30",
+            "slot_type": "REGULAR",
+            "display_order": 1
+        },
+        {
+            "id": 2,
+            "start_time": "09:30",
+            "end_time": "10:30",
+            "label": "09.30 TO 10.30",
+            "slot_type": "REGULAR",
+            "display_order": 2
+        },
+        {
+            "id": 3,
+            "start_time": "10:30",
+            "end_time": "10:40",
+            "label": "SHORT BREAK 10.30-10.40",
+            "slot_type": "RECESS",
+            "is_break": 1,
+            "name": "SHORT BREAK",
+            "display_order": 3
+        },
+        {
+            "id": 4,
+            "start_time": "10:40",
+            "end_time": "11:40",
+            "label": "10.40 TO 11.40",
+            "slot_type": "REGULAR",
+            "display_order": 4
+        },
+        {
+            "id": 5,
+            "start_time": "11:40",
+            "end_time": "12:40",
+            "label": "11.40 TO 12.40",
+            "slot_type": "REGULAR",
+            "display_order": 5
+        },
+        {
+            "id": 6,
+            "start_time": "12:40",
+            "end_time": "13:30",
+            "label": "LUNCH BREAK 12.40-01.30",
+            "slot_type": "RECESS",
+            "is_break": 1,
+            "name": "LUNCH BREAK",
+            "display_order": 6
+        },
+        {
+            "id": 7,
+            "start_time": "13:30",
+            "end_time": "15:30",
+            "label": "01.30 TO 03.30",
+            "slot_type": "REGULAR",
+            "display_order": 7
+        }
+    ],
     "users": [
         {
             "id": 1,
-            "email": "teacher@campus.edu",
+            "email": "dhanashree.kulkarni@nmiet.edu.in",
             "password_hash": "1234",
             "role": "HOD",
             "name": "Dr. Dhanashree Kulkarni",
@@ -22,16 +145,66 @@ INITIAL_DB_STATE = {
         },
         {
             "id": 2,
-            "email": "faculty@campus.edu",
+            "email": "sagar.shinde@campus.edu",
             "password_hash": "1234",
             "role": "TEACHER",
-            "name": "Prof. A. R. Sharma",
+            "name": "Dr. Sagar Shinde",
             "status": "APPROVED",
             "is_activated": true,
             "must_change_credentials": false
         },
         {
             "id": 3,
+            "email": "priyanka.patil@campus.edu",
+            "password_hash": "1234",
+            "role": "TEACHER",
+            "name": "Dr. Priyanka Patil",
+            "status": "APPROVED",
+            "is_activated": true,
+            "must_change_credentials": false
+        },
+        {
+            "id": 4,
+            "email": "dhanashree.dixit@campus.edu",
+            "password_hash": "1234",
+            "role": "TEACHER",
+            "name": "Ms. Dhanashree Dixit",
+            "status": "APPROVED",
+            "is_activated": true,
+            "must_change_credentials": false
+        },
+        {
+            "id": 5,
+            "email": "muktai.surnar@campus.edu",
+            "password_hash": "1234",
+            "role": "TEACHER",
+            "name": "Ms. Muktai Surnar",
+            "status": "APPROVED",
+            "is_activated": true,
+            "must_change_credentials": false
+        },
+        {
+            "id": 6,
+            "email": "vikas.t@campus.edu",
+            "password_hash": "1234",
+            "role": "TEACHER",
+            "name": "Mr. Vikas T.",
+            "status": "APPROVED",
+            "is_activated": true,
+            "must_change_credentials": false
+        },
+        {
+            "id": 7,
+            "email": "sujata.gaikwad@campus.edu",
+            "password_hash": "1234",
+            "role": "TEACHER",
+            "name": "Ms. Sujata Gaikwad",
+            "status": "APPROVED",
+            "is_activated": true,
+            "must_change_credentials": false
+        },
+        {
+            "id": 8,
             "email": "",
             "username": "U251H001",
             "prn_no": "U251H001",
@@ -49,7 +222,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 4,
+            "id": 9,
             "email": "",
             "username": "U251H003",
             "prn_no": "U251H003",
@@ -67,7 +240,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 5,
+            "id": 10,
             "email": "",
             "username": "U251H004",
             "prn_no": "U251H004",
@@ -85,7 +258,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 6,
+            "id": 11,
             "email": "",
             "username": "U251H006",
             "prn_no": "U251H006",
@@ -103,7 +276,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 7,
+            "id": 12,
             "email": "",
             "username": "U251H009",
             "prn_no": "U251H009",
@@ -121,7 +294,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 8,
+            "id": 13,
             "email": "",
             "username": "U251H010",
             "prn_no": "U251H010",
@@ -139,7 +312,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 9,
+            "id": 14,
             "email": "",
             "username": "U251H013",
             "prn_no": "U251H013",
@@ -157,7 +330,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 10,
+            "id": 15,
             "email": "",
             "username": "U251H014",
             "prn_no": "U251H014",
@@ -175,7 +348,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 11,
+            "id": 16,
             "email": "",
             "username": "U251H017",
             "prn_no": "U251H017",
@@ -193,7 +366,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 12,
+            "id": 17,
             "email": "",
             "username": "U251H018",
             "prn_no": "U251H018",
@@ -211,7 +384,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 13,
+            "id": 18,
             "email": "",
             "username": "U251H020",
             "prn_no": "U251H020",
@@ -229,7 +402,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 14,
+            "id": 19,
             "email": "",
             "username": "U251H022",
             "prn_no": "U251H022",
@@ -247,7 +420,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 15,
+            "id": 20,
             "email": "",
             "username": "U251H025",
             "prn_no": "U251H025",
@@ -265,7 +438,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 16,
+            "id": 21,
             "email": "",
             "username": "U251H026",
             "prn_no": "U251H026",
@@ -283,7 +456,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 17,
+            "id": 22,
             "email": "",
             "username": "U251H029",
             "prn_no": "U251H029",
@@ -301,7 +474,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 18,
+            "id": 23,
             "email": "",
             "username": "U251H030",
             "prn_no": "U251H030",
@@ -319,7 +492,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 19,
+            "id": 24,
             "email": "",
             "username": "U251H032",
             "prn_no": "U251H032",
@@ -337,7 +510,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 20,
+            "id": 25,
             "email": "",
             "username": "U251H035",
             "prn_no": "U251H035",
@@ -355,7 +528,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 21,
+            "id": 26,
             "email": "",
             "username": "U251H036",
             "prn_no": "U251H036",
@@ -373,7 +546,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 22,
+            "id": 27,
             "email": "",
             "username": "U251H038",
             "prn_no": "U251H038",
@@ -391,7 +564,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 23,
+            "id": 28,
             "email": "",
             "username": "U251H040",
             "prn_no": "U251H040",
@@ -409,7 +582,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 24,
+            "id": 29,
             "email": "",
             "username": "U251H044",
             "prn_no": "U251H044",
@@ -427,7 +600,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 25,
+            "id": 30,
             "email": "",
             "username": "U251H046",
             "prn_no": "U251H046",
@@ -445,7 +618,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 26,
+            "id": 31,
             "email": "",
             "username": "U251H048",
             "prn_no": "U251H048",
@@ -463,7 +636,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 27,
+            "id": 32,
             "email": "",
             "username": "U251H049",
             "prn_no": "U251H049",
@@ -481,7 +654,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 28,
+            "id": 33,
             "email": "",
             "username": "U251H051",
             "prn_no": "U251H051",
@@ -499,7 +672,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 29,
+            "id": 34,
             "email": "",
             "username": "U251H054",
             "prn_no": "U251H054",
@@ -517,7 +690,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 30,
+            "id": 35,
             "email": "",
             "username": "U251H056",
             "prn_no": "U251H056",
@@ -535,7 +708,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 31,
+            "id": 36,
             "email": "",
             "username": "U251H057",
             "prn_no": "U251H057",
@@ -553,7 +726,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 32,
+            "id": 37,
             "email": "",
             "username": "U251H060",
             "prn_no": "U251H060",
@@ -571,7 +744,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 33,
+            "id": 38,
             "email": "",
             "username": "U251H062",
             "prn_no": "U251H062",
@@ -589,7 +762,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 34,
+            "id": 39,
             "email": "",
             "username": "U251H064",
             "prn_no": "U251H064",
@@ -607,7 +780,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 35,
+            "id": 40,
             "email": "",
             "username": "U251H065",
             "prn_no": "U251H065",
@@ -625,7 +798,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 36,
+            "id": 41,
             "email": "",
             "username": "U251H067",
             "prn_no": "U251H067",
@@ -643,7 +816,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 37,
+            "id": 42,
             "email": "",
             "username": "U251H070",
             "prn_no": "U251H070",
@@ -661,7 +834,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 38,
+            "id": 43,
             "email": "",
             "username": "U251H072",
             "prn_no": "U251H072",
@@ -679,7 +852,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 39,
+            "id": 44,
             "email": "",
             "username": "U251H073",
             "prn_no": "U251H073",
@@ -697,7 +870,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 40,
+            "id": 45,
             "email": "",
             "username": "U251H076",
             "prn_no": "U251H076",
@@ -715,7 +888,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 41,
+            "id": 46,
             "email": "",
             "username": "U251H077",
             "prn_no": "U251H077",
@@ -733,7 +906,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 42,
+            "id": 47,
             "email": "",
             "username": "U251H079",
             "prn_no": "U251H079",
@@ -751,7 +924,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 43,
+            "id": 48,
             "email": "",
             "username": "U251H080",
             "prn_no": "U251H080",
@@ -769,7 +942,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 44,
+            "id": 49,
             "email": "",
             "username": "U251H083",
             "prn_no": "U251H083",
@@ -787,7 +960,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 45,
+            "id": 50,
             "email": "",
             "username": "U251H085",
             "prn_no": "U251H085",
@@ -805,7 +978,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 46,
+            "id": 51,
             "email": "",
             "username": "U251H088",
             "prn_no": "U251H088",
@@ -823,7 +996,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 47,
+            "id": 52,
             "email": "",
             "username": "U251H089",
             "prn_no": "U251H089",
@@ -841,7 +1014,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 48,
+            "id": 53,
             "email": "",
             "username": "U251H091",
             "prn_no": "U251H091",
@@ -859,7 +1032,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 49,
+            "id": 54,
             "email": "",
             "username": "U251H094",
             "prn_no": "U251H094",
@@ -877,7 +1050,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 50,
+            "id": 55,
             "email": "",
             "username": "U251H096",
             "prn_no": "U251H096",
@@ -895,7 +1068,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 51,
+            "id": 56,
             "email": "",
             "username": "U251H097",
             "prn_no": "U251H097",
@@ -913,7 +1086,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 52,
+            "id": 57,
             "email": "",
             "username": "U251H099",
             "prn_no": "U251H099",
@@ -931,7 +1104,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 53,
+            "id": 58,
             "email": "",
             "username": "U251H101",
             "prn_no": "U251H101",
@@ -949,7 +1122,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 54,
+            "id": 59,
             "email": "",
             "username": "U251H103",
             "prn_no": "U251H103",
@@ -967,7 +1140,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 55,
+            "id": 60,
             "email": "",
             "username": "U251H105",
             "prn_no": "U251H105",
@@ -985,7 +1158,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 56,
+            "id": 61,
             "email": "",
             "username": "U251H107",
             "prn_no": "U251H107",
@@ -1003,7 +1176,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 57,
+            "id": 62,
             "email": "",
             "username": "U251H109",
             "prn_no": "U251H109",
@@ -1021,7 +1194,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 58,
+            "id": 63,
             "email": "",
             "username": "U251H111",
             "prn_no": "U251H111",
@@ -1039,7 +1212,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 59,
+            "id": 64,
             "email": "",
             "username": "U251H114",
             "prn_no": "U251H114",
@@ -1057,7 +1230,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 60,
+            "id": 65,
             "email": "",
             "username": "U251H116",
             "prn_no": "U251H116",
@@ -1075,7 +1248,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 61,
+            "id": 66,
             "email": "",
             "username": "U251H117",
             "prn_no": "U251H117",
@@ -1093,7 +1266,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 62,
+            "id": 67,
             "email": "",
             "username": "U251H120",
             "prn_no": "U251H120",
@@ -1111,7 +1284,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 63,
+            "id": 68,
             "email": "",
             "username": "U251H122",
             "prn_no": "U251H122",
@@ -1129,7 +1302,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 64,
+            "id": 69,
             "email": "",
             "username": "U251H042",
             "prn_no": "U251H042",
@@ -1147,7 +1320,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 65,
+            "id": 70,
             "email": "",
             "username": "U251H002",
             "prn_no": "U251H002",
@@ -1165,7 +1338,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 66,
+            "id": 71,
             "email": "",
             "username": "U251H005",
             "prn_no": "U251H005",
@@ -1183,7 +1356,25 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 68,
+            "id": 72,
+            "email": "",
+            "username": "U251H007",
+            "prn_no": "U251H007",
+            "roll_no": "03",
+            "division_id": 2,
+            "batch_id": 4,
+            "division_name": "SE(ECE)-B",
+            "batch_name": "B1",
+            "password_hash": "Student@123",
+            "role": "STUDENT",
+            "name": "AWADHWAL NIKHIL MUKESH",
+            "status": "APPROVED",
+            "is_activated": false,
+            "must_change_credentials": true,
+            "is_logged_in": false
+        },
+        {
+            "id": 73,
             "email": "",
             "username": "U251H008",
             "prn_no": "U251H008",
@@ -1201,7 +1392,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 69,
+            "id": 74,
             "email": "",
             "username": "U251H011",
             "prn_no": "U251H011",
@@ -1219,7 +1410,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 70,
+            "id": 75,
             "email": "",
             "username": "U251H012",
             "prn_no": "U251H012",
@@ -1237,7 +1428,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 71,
+            "id": 76,
             "email": "",
             "username": "U251H015",
             "prn_no": "U251H015",
@@ -1255,7 +1446,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 72,
+            "id": 77,
             "email": "",
             "username": "U251H016",
             "prn_no": "U251H016",
@@ -1273,7 +1464,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 73,
+            "id": 78,
             "email": "",
             "username": "U251H019",
             "prn_no": "U251H019",
@@ -1291,7 +1482,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 74,
+            "id": 79,
             "email": "",
             "username": "U251H021",
             "prn_no": "U251H021",
@@ -1309,7 +1500,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 75,
+            "id": 80,
             "email": "",
             "username": "U251H023",
             "prn_no": "U251H023",
@@ -1327,7 +1518,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 76,
+            "id": 81,
             "email": "",
             "username": "U251H024",
             "prn_no": "U251H024",
@@ -1345,7 +1536,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 77,
+            "id": 82,
             "email": "",
             "username": "U251H027",
             "prn_no": "U251H027",
@@ -1363,7 +1554,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 78,
+            "id": 83,
             "email": "",
             "username": "U251H028",
             "prn_no": "U251H028",
@@ -1381,7 +1572,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 79,
+            "id": 84,
             "email": "",
             "username": "U251H031",
             "prn_no": "U251H031",
@@ -1399,7 +1590,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 80,
+            "id": 85,
             "email": "",
             "username": "U251H033",
             "prn_no": "U251H033",
@@ -1417,7 +1608,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 81,
+            "id": 86,
             "email": "",
             "username": "U251H034",
             "prn_no": "U251H034",
@@ -1435,7 +1626,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 82,
+            "id": 87,
             "email": "",
             "username": "U251H037",
             "prn_no": "U251H037",
@@ -1453,7 +1644,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 83,
+            "id": 88,
             "email": "",
             "username": "U251H039",
             "prn_no": "U251H039",
@@ -1471,7 +1662,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 84,
+            "id": 89,
             "email": "",
             "username": "U251H041",
             "prn_no": "U251H041",
@@ -1489,7 +1680,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 85,
+            "id": 90,
             "email": "",
             "username": "U251H043",
             "prn_no": "U251H043",
@@ -1507,7 +1698,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 86,
+            "id": 91,
             "email": "",
             "username": "U251H045",
             "prn_no": "U251H045",
@@ -1525,7 +1716,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 87,
+            "id": 92,
             "email": "",
             "username": "U251H047",
             "prn_no": "U251H047",
@@ -1543,7 +1734,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 88,
+            "id": 93,
             "email": "",
             "username": "U251H050",
             "prn_no": "U251H050",
@@ -1561,7 +1752,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 89,
+            "id": 94,
             "email": "",
             "username": "U251H052",
             "prn_no": "U251H052",
@@ -1579,7 +1770,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 90,
+            "id": 95,
             "email": "",
             "username": "U251H053",
             "prn_no": "U251H053",
@@ -1597,7 +1788,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 91,
+            "id": 96,
             "email": "",
             "username": "U251H055",
             "prn_no": "U251H055",
@@ -1615,7 +1806,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 92,
+            "id": 97,
             "email": "",
             "username": "U251H058",
             "prn_no": "U251H058",
@@ -1633,7 +1824,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 93,
+            "id": 98,
             "email": "",
             "username": "U251H059",
             "prn_no": "U251H059",
@@ -1651,7 +1842,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 94,
+            "id": 99,
             "email": "",
             "username": "U251H061",
             "prn_no": "U251H061",
@@ -1669,7 +1860,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 95,
+            "id": 100,
             "email": "",
             "username": "U251H063",
             "prn_no": "U251H063",
@@ -1687,7 +1878,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 96,
+            "id": 101,
             "email": "",
             "username": "U251H066",
             "prn_no": "U251H066",
@@ -1705,7 +1896,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 97,
+            "id": 102,
             "email": "",
             "username": "U251H068",
             "prn_no": "U251H068",
@@ -1723,7 +1914,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 98,
+            "id": 103,
             "email": "",
             "username": "U251H069",
             "prn_no": "U251H069",
@@ -1741,7 +1932,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 99,
+            "id": 104,
             "email": "",
             "username": "U251H071",
             "prn_no": "U251H071",
@@ -1759,7 +1950,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 100,
+            "id": 105,
             "email": "",
             "username": "U251H074",
             "prn_no": "U251H074",
@@ -1777,7 +1968,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 101,
+            "id": 106,
             "email": "",
             "username": "U251H075",
             "prn_no": "U251H075",
@@ -1795,7 +1986,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 102,
+            "id": 107,
             "email": "",
             "username": "U251H078",
             "prn_no": "U251H078",
@@ -1813,7 +2004,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 103,
+            "id": 108,
             "email": "",
             "username": "U251H081",
             "prn_no": "U251H081",
@@ -1831,7 +2022,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 104,
+            "id": 109,
             "email": "",
             "username": "U251H082",
             "prn_no": "U251H082",
@@ -1849,7 +2040,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 105,
+            "id": 110,
             "email": "",
             "username": "U251H084",
             "prn_no": "U251H084",
@@ -1867,7 +2058,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 106,
+            "id": 111,
             "email": "",
             "username": "U251H086",
             "prn_no": "U251H086",
@@ -1885,7 +2076,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 107,
+            "id": 112,
             "email": "",
             "username": "U251H087",
             "prn_no": "U251H087",
@@ -1903,7 +2094,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 108,
+            "id": 113,
             "email": "",
             "username": "U251H090",
             "prn_no": "U251H090",
@@ -1921,7 +2112,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 109,
+            "id": 114,
             "email": "",
             "username": "U251H092",
             "prn_no": "U251H092",
@@ -1939,7 +2130,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 110,
+            "id": 115,
             "email": "",
             "username": "U251H093",
             "prn_no": "U251H093",
@@ -1957,7 +2148,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 111,
+            "id": 116,
             "email": "",
             "username": "U251H095",
             "prn_no": "U251H095",
@@ -1975,7 +2166,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 112,
+            "id": 117,
             "email": "",
             "username": "U251H098",
             "prn_no": "U251H098",
@@ -1993,7 +2184,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 113,
+            "id": 118,
             "email": "",
             "username": "U251H100",
             "prn_no": "U251H100",
@@ -2011,7 +2202,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 114,
+            "id": 119,
             "email": "",
             "username": "U251H102",
             "prn_no": "U251H102",
@@ -2029,7 +2220,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 115,
+            "id": 120,
             "email": "",
             "username": "U251H104",
             "prn_no": "U251H104",
@@ -2047,7 +2238,25 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 117,
+            "id": 121,
+            "email": "",
+            "username": "U251H106",
+            "prn_no": "U251H106",
+            "roll_no": "53",
+            "division_id": 2,
+            "batch_id": 6,
+            "division_name": "SE(ECE)-B",
+            "batch_name": "B3",
+            "password_hash": "Student@123",
+            "role": "STUDENT",
+            "name": "SHREYASH NITIN KHAJEKAR",
+            "status": "APPROVED",
+            "is_activated": false,
+            "must_change_credentials": true,
+            "is_logged_in": false
+        },
+        {
+            "id": 122,
             "email": "",
             "username": "U251H108",
             "prn_no": "U251H108",
@@ -2065,7 +2274,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 118,
+            "id": 123,
             "email": "",
             "username": "U251H110",
             "prn_no": "U251H110",
@@ -2083,7 +2292,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 119,
+            "id": 124,
             "email": "",
             "username": "U251H112",
             "prn_no": "U251H112",
@@ -2101,7 +2310,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 120,
+            "id": 125,
             "email": "",
             "username": "U251H113",
             "prn_no": "U251H113",
@@ -2119,7 +2328,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 121,
+            "id": 126,
             "email": "",
             "username": "U251H115",
             "prn_no": "U251H115",
@@ -2137,7 +2346,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 122,
+            "id": 127,
             "email": "",
             "username": "U251H118",
             "prn_no": "U251H118",
@@ -2155,7 +2364,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 123,
+            "id": 128,
             "email": "",
             "username": "U251H119",
             "prn_no": "U251H119",
@@ -2173,7 +2382,7 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 124,
+            "id": 129,
             "email": "",
             "username": "U251H121",
             "prn_no": "U251H121",
@@ -2193,8 +2402,8 @@ INITIAL_DB_STATE = {
     ],
     "students": [
         {
-            "id": 1,
-            "user_id": 3,
+            "id": 6,
+            "user_id": 8,
             "name": "ADE ANIKET DATTATRAY",
             "roll_no": "01",
             "prn_no": "U251H001",
@@ -2213,8 +2422,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 2,
-            "user_id": 4,
+            "id": 7,
+            "user_id": 9,
             "name": "ANBHULE SANSKAR DEVRAO",
             "roll_no": "02",
             "prn_no": "U251H003",
@@ -2233,8 +2442,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 3,
-            "user_id": 5,
+            "id": 8,
+            "user_id": 10,
             "name": "ANUJA SANJAY PISALE",
             "roll_no": "03",
             "prn_no": "U251H004",
@@ -2253,8 +2462,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 4,
-            "user_id": 6,
+            "id": 9,
+            "user_id": 11,
             "name": "ATHARVA PANDURANG KARANJEKAR",
             "roll_no": "04",
             "prn_no": "U251H006",
@@ -2273,8 +2482,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 5,
-            "user_id": 7,
+            "id": 10,
+            "user_id": 12,
             "name": "BANGDE ARYAN NITIN",
             "roll_no": "05",
             "prn_no": "U251H009",
@@ -2293,8 +2502,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 6,
-            "user_id": 8,
+            "id": 11,
+            "user_id": 13,
             "name": "BATHE ADITI AJAY",
             "roll_no": "06",
             "prn_no": "U251H010",
@@ -2313,8 +2522,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 7,
-            "user_id": 9,
+            "id": 12,
+            "user_id": 14,
             "name": "BHAVE GUN SHALIK",
             "roll_no": "07",
             "prn_no": "U251H013",
@@ -2333,8 +2542,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 8,
-            "user_id": 10,
+            "id": 13,
+            "user_id": 15,
             "name": "BHAWAR VAIBHAV BABAN",
             "roll_no": "08",
             "prn_no": "U251H014",
@@ -2353,8 +2562,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 9,
-            "user_id": 11,
+            "id": 14,
+            "user_id": 16,
             "name": "BIRADAR ARJUN ARVIND",
             "roll_no": "09",
             "prn_no": "U251H017",
@@ -2373,8 +2582,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 10,
-            "user_id": 12,
+            "id": 15,
+            "user_id": 17,
             "name": "BIRAJDAR ARPITA SAGAR",
             "roll_no": "10",
             "prn_no": "U251H018",
@@ -2393,8 +2602,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 11,
-            "user_id": 13,
+            "id": 16,
+            "user_id": 18,
             "name": "BORKAR PRANAV PRASHANT",
             "roll_no": "11",
             "prn_no": "U251H020",
@@ -2413,8 +2622,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 12,
-            "user_id": 14,
+            "id": 17,
+            "user_id": 19,
             "name": "CHOUDHARY SANKET RAJENDRA",
             "roll_no": "12",
             "prn_no": "U251H022",
@@ -2433,8 +2642,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 13,
-            "user_id": 15,
+            "id": 18,
+            "user_id": 20,
             "name": "DAUNDKAR MANTHAN SANDEEP",
             "roll_no": "13",
             "prn_no": "U251H025",
@@ -2453,8 +2662,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 14,
-            "user_id": 16,
+            "id": 19,
+            "user_id": 21,
             "name": "DAWANGE CHAITALI VIJAY",
             "roll_no": "14",
             "prn_no": "U251H026",
@@ -2473,8 +2682,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 15,
-            "user_id": 17,
+            "id": 20,
+            "user_id": 22,
             "name": "DHAKATE AARTI SANJAY",
             "roll_no": "15",
             "prn_no": "U251H029",
@@ -2493,8 +2702,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 16,
-            "user_id": 18,
+            "id": 21,
+            "user_id": 23,
             "name": "DHIRAJ SANJAY MINDE",
             "roll_no": "16",
             "prn_no": "U251H030",
@@ -2513,8 +2722,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 17,
-            "user_id": 19,
+            "id": 22,
+            "user_id": 24,
             "name": "GADE PRACHI ANIL",
             "roll_no": "17",
             "prn_no": "U251H032",
@@ -2533,8 +2742,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 18,
-            "user_id": 20,
+            "id": 23,
+            "user_id": 25,
             "name": "GAWADE ANVESHA HARIRAM",
             "roll_no": "18",
             "prn_no": "U251H035",
@@ -2553,8 +2762,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 19,
-            "user_id": 21,
+            "id": 24,
+            "user_id": 26,
             "name": "GHADAGE ANUJ VIKAS",
             "roll_no": "19",
             "prn_no": "U251H036",
@@ -2573,8 +2782,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 20,
-            "user_id": 22,
+            "id": 25,
+            "user_id": 27,
             "name": "GHOJAGE PRATHAMESH RAMESH",
             "roll_no": "20",
             "prn_no": "U251H038",
@@ -2593,8 +2802,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 21,
-            "user_id": 23,
+            "id": 26,
+            "user_id": 28,
             "name": "INDRALE RANJIT BALAPPA",
             "roll_no": "21",
             "prn_no": "U251H040",
@@ -2613,8 +2822,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 22,
-            "user_id": 24,
+            "id": 27,
+            "user_id": 29,
             "name": "JADHAV TANUSHREE HANMANT",
             "roll_no": "22",
             "prn_no": "U251H044",
@@ -2633,8 +2842,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 23,
-            "user_id": 25,
+            "id": 28,
+            "user_id": 30,
             "name": "JAWALE POONAM MADHAV",
             "roll_no": "23",
             "prn_no": "U251H046",
@@ -2653,8 +2862,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 24,
-            "user_id": 26,
+            "id": 29,
+            "user_id": 31,
             "name": "JUNGHARE YAMINI GANPAT",
             "roll_no": "24",
             "prn_no": "U251H048",
@@ -2673,8 +2882,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 25,
-            "user_id": 27,
+            "id": 30,
+            "user_id": 32,
             "name": "KADAM ARJUN ANANTRAO",
             "roll_no": "25",
             "prn_no": "U251H049",
@@ -2693,8 +2902,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 26,
-            "user_id": 28,
+            "id": 31,
+            "user_id": 33,
             "name": "KALPE PRATHMESH PRAKASH",
             "roll_no": "26",
             "prn_no": "U251H051",
@@ -2713,8 +2922,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 27,
-            "user_id": 29,
+            "id": 32,
+            "user_id": 34,
             "name": "KHUSHAL DATTATRAY KAPADANE",
             "roll_no": "27",
             "prn_no": "U251H054",
@@ -2733,8 +2942,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 28,
-            "user_id": 30,
+            "id": 33,
+            "user_id": 35,
             "name": "KSHITIJA NANDKISHOR HURSAD",
             "roll_no": "28",
             "prn_no": "U251H056",
@@ -2753,8 +2962,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 29,
-            "user_id": 31,
+            "id": 34,
+            "user_id": 36,
             "name": "KUMBHAR NIRANJAN SANTOSH",
             "roll_no": "29",
             "prn_no": "U251H057",
@@ -2773,8 +2982,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 30,
-            "user_id": 32,
+            "id": 35,
+            "user_id": 37,
             "name": "MAGAR ANJALI SATISH",
             "roll_no": "30",
             "prn_no": "U251H060",
@@ -2793,8 +3002,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 31,
-            "user_id": 33,
+            "id": 36,
+            "user_id": 38,
             "name": "MALI NITIN DEVIDAS",
             "roll_no": "31",
             "prn_no": "U251H062",
@@ -2813,8 +3022,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 32,
-            "user_id": 34,
+            "id": 37,
+            "user_id": 39,
             "name": "MISAL MAHESH VITTHAL",
             "roll_no": "32",
             "prn_no": "U251H064",
@@ -2833,8 +3042,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 33,
-            "user_id": 35,
+            "id": 38,
+            "user_id": 40,
             "name": "MITALI TITAR",
             "roll_no": "33",
             "prn_no": "U251H065",
@@ -2853,8 +3062,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 34,
-            "user_id": 36,
+            "id": 39,
+            "user_id": 41,
             "name": "MOHITE RITESH NAMDEV",
             "roll_no": "34",
             "prn_no": "U251H067",
@@ -2873,8 +3082,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 35,
-            "user_id": 37,
+            "id": 40,
+            "user_id": 42,
             "name": "NAIK ROHIT TANAJI",
             "roll_no": "35",
             "prn_no": "U251H070",
@@ -2893,8 +3102,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 36,
-            "user_id": 38,
+            "id": 41,
+            "user_id": 43,
             "name": "NAVGHARE GAYATRI YOGESH",
             "roll_no": "36",
             "prn_no": "U251H072",
@@ -2913,8 +3122,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 37,
-            "user_id": 39,
+            "id": 42,
+            "user_id": 44,
             "name": "NEMADE DEEVESH KUSHAL",
             "roll_no": "37",
             "prn_no": "U251H073",
@@ -2933,8 +3142,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 38,
-            "user_id": 40,
+            "id": 43,
+            "user_id": 45,
             "name": "NIKAM PRATIK SHARAD",
             "roll_no": "38",
             "prn_no": "U251H076",
@@ -2953,8 +3162,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 39,
-            "user_id": 41,
+            "id": 44,
+            "user_id": 46,
             "name": "NIKHIL DHANWANT PADWAL",
             "roll_no": "39",
             "prn_no": "U251H077",
@@ -2973,8 +3182,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 40,
-            "user_id": 42,
+            "id": 45,
+            "user_id": 47,
             "name": "NISHA NAVNATH MANDHARE",
             "roll_no": "40",
             "prn_no": "U251H079",
@@ -2993,8 +3202,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 41,
-            "user_id": 43,
+            "id": 46,
+            "user_id": 48,
             "name": "OM SHARAD KASHID",
             "roll_no": "41",
             "prn_no": "U251H080",
@@ -3013,8 +3222,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 42,
-            "user_id": 44,
+            "id": 47,
+            "user_id": 49,
             "name": "PADHEN ABHIJIT SANTOSH",
             "roll_no": "42",
             "prn_no": "U251H083",
@@ -3033,8 +3242,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 43,
-            "user_id": 45,
+            "id": 48,
+            "user_id": 50,
             "name": "PATIL POORVA SANTOSH",
             "roll_no": "43",
             "prn_no": "U251H085",
@@ -3053,8 +3262,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 44,
-            "user_id": 46,
+            "id": 49,
+            "user_id": 51,
             "name": "PRANJALI PRADIP MAHAJAN",
             "roll_no": "44",
             "prn_no": "U251H088",
@@ -3073,8 +3282,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 45,
-            "user_id": 47,
+            "id": 50,
+            "user_id": 52,
             "name": "PRIYANSHU PRASAD",
             "roll_no": "45",
             "prn_no": "U251H089",
@@ -3093,8 +3302,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 46,
-            "user_id": 48,
+            "id": 51,
+            "user_id": 53,
             "name": "RAJMANE VAIBHAV SHIVAJI",
             "roll_no": "46",
             "prn_no": "U251H091",
@@ -3113,8 +3322,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 47,
-            "user_id": 49,
+            "id": 52,
+            "user_id": 54,
             "name": "RANDHIR MAITRALI KISHOR",
             "roll_no": "47",
             "prn_no": "U251H094",
@@ -3133,8 +3342,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 48,
-            "user_id": 50,
+            "id": 53,
+            "user_id": 55,
             "name": "SAMRUDDHI VASANT PADWAL",
             "roll_no": "48",
             "prn_no": "U251H096",
@@ -3153,8 +3362,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 49,
-            "user_id": 51,
+            "id": 54,
+            "user_id": 56,
             "name": "SANDBHOR TANMAY SUDHAKAR",
             "roll_no": "49",
             "prn_no": "U251H097",
@@ -3173,8 +3382,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 50,
-            "user_id": 52,
+            "id": 55,
+            "user_id": 57,
             "name": "SANKET NARESH NEMADE",
             "roll_no": "50",
             "prn_no": "U251H099",
@@ -3193,8 +3402,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 51,
-            "user_id": 53,
+            "id": 56,
+            "user_id": 58,
             "name": "SHAIKH AMAN TURAB",
             "roll_no": "51",
             "prn_no": "U251H101",
@@ -3213,8 +3422,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 52,
-            "user_id": 54,
+            "id": 57,
+            "user_id": 59,
             "name": "SHINDE MANSI MALHARI",
             "roll_no": "52",
             "prn_no": "U251H103",
@@ -3233,8 +3442,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 53,
-            "user_id": 55,
+            "id": 58,
+            "user_id": 60,
             "name": "SHINDE SANSKAR CHANDRAKANT",
             "roll_no": "53",
             "prn_no": "U251H105",
@@ -3253,8 +3462,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 54,
-            "user_id": 56,
+            "id": 59,
+            "user_id": 61,
             "name": "SHRUJAL SUNIL INDE",
             "roll_no": "54",
             "prn_no": "U251H107",
@@ -3273,8 +3482,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 55,
-            "user_id": 57,
+            "id": 60,
+            "user_id": 62,
             "name": "SONAWANE ROSHANI SATILAL",
             "roll_no": "55",
             "prn_no": "U251H109",
@@ -3293,8 +3502,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 56,
-            "user_id": 58,
+            "id": 61,
+            "user_id": 63,
             "name": "SULAKHE OJAS PRASHANT",
             "roll_no": "56",
             "prn_no": "U251H111",
@@ -3313,8 +3522,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 57,
-            "user_id": 59,
+            "id": 62,
+            "user_id": 64,
             "name": "TEKALE HARSHADA VIJAYRAO",
             "roll_no": "57",
             "prn_no": "U251H114",
@@ -3333,8 +3542,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 58,
-            "user_id": 60,
+            "id": 63,
+            "user_id": 65,
             "name": "THORBOLE DIPALI PRAKASH",
             "roll_no": "58",
             "prn_no": "U251H116",
@@ -3353,8 +3562,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 59,
-            "user_id": 61,
+            "id": 64,
+            "user_id": 66,
             "name": "TONAPE DHANANJAY SACHIN",
             "roll_no": "59",
             "prn_no": "U251H117",
@@ -3373,8 +3582,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 60,
-            "user_id": 62,
+            "id": 65,
+            "user_id": 67,
             "name": "WAGH AMAN ABA",
             "roll_no": "60",
             "prn_no": "U251H120",
@@ -3393,8 +3602,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 61,
-            "user_id": 63,
+            "id": 66,
+            "user_id": 68,
             "name": "YEOLE VRUSHABH PANKAJ",
             "roll_no": "61",
             "prn_no": "U251H122",
@@ -3413,8 +3622,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 62,
-            "user_id": 64,
+            "id": 67,
+            "user_id": 69,
             "name": "JADHAV PAYAL LAXMAN",
             "roll_no": "62",
             "prn_no": "U251H042",
@@ -3433,8 +3642,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 63,
-            "user_id": 65,
+            "id": 68,
+            "user_id": 70,
             "name": "ANAND SHINDALKAR MARUTI",
             "roll_no": "01",
             "prn_no": "U251H002",
@@ -3453,8 +3662,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 64,
-            "user_id": 66,
+            "id": 69,
+            "user_id": 71,
             "name": "ARAS MANGESH MAHESH",
             "roll_no": "02",
             "prn_no": "U251H005",
@@ -3473,8 +3682,28 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 66,
-            "user_id": 68,
+            "id": 70,
+            "user_id": 72,
+            "name": "AWADHWAL NIKHIL MUKESH",
+            "roll_no": "03",
+            "prn_no": "U251H007",
+            "username": "U251H007",
+            "department_id": 1,
+            "semester_id": 1,
+            "division_id": 2,
+            "batch_id": 4,
+            "division_name": "SE(ECE)-B",
+            "batch_name": "B1",
+            "email": "",
+            "password_hash": "Student@123",
+            "status": "APPROVED",
+            "is_activated": false,
+            "must_change_credentials": true,
+            "is_logged_in": false
+        },
+        {
+            "id": 71,
+            "user_id": 73,
             "name": "BACCHEWAR SANCHITA SANTOSH",
             "roll_no": "04",
             "prn_no": "U251H008",
@@ -3493,8 +3722,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 67,
-            "user_id": 69,
+            "id": 72,
+            "user_id": 74,
             "name": "BHAMBERE TANISH CHANDU",
             "roll_no": "05",
             "prn_no": "U251H011",
@@ -3513,8 +3742,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 68,
-            "user_id": 70,
+            "id": 73,
+            "user_id": 75,
             "name": "BHARANE NIKITA SURESH",
             "roll_no": "06",
             "prn_no": "U251H012",
@@ -3533,8 +3762,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 69,
-            "user_id": 71,
+            "id": 74,
+            "user_id": 76,
             "name": "BHISE SANSKRUTI VISHWAS",
             "roll_no": "07",
             "prn_no": "U251H015",
@@ -3553,8 +3782,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 70,
-            "user_id": 72,
+            "id": 75,
+            "user_id": 77,
             "name": "BHOSLE PRATHMESH RAMESH",
             "roll_no": "08",
             "prn_no": "U251H016",
@@ -3573,8 +3802,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 71,
-            "user_id": 73,
+            "id": 76,
+            "user_id": 78,
             "name": "BONDAR SHIVAM NANASAHEB",
             "roll_no": "09",
             "prn_no": "U251H019",
@@ -3593,8 +3822,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 72,
-            "user_id": 74,
+            "id": 77,
+            "user_id": 79,
             "name": "CHAUDHARI PRAJWAL MANOJ",
             "roll_no": "10",
             "prn_no": "U251H021",
@@ -3613,8 +3842,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 73,
-            "user_id": 75,
+            "id": 78,
+            "user_id": 80,
             "name": "DAMKONDWAR RITIKA LAXMAN",
             "roll_no": "11",
             "prn_no": "U251H023",
@@ -3633,8 +3862,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 74,
-            "user_id": 76,
+            "id": 79,
+            "user_id": 81,
             "name": "DARSHAN SANTOSH GHUNAWAT",
             "roll_no": "12",
             "prn_no": "U251H024",
@@ -3653,8 +3882,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 75,
-            "user_id": 77,
+            "id": 80,
+            "user_id": 82,
             "name": "DESHPANDE MADHURA SANJAY",
             "roll_no": "13",
             "prn_no": "U251H027",
@@ -3673,8 +3902,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 76,
-            "user_id": 78,
+            "id": 81,
+            "user_id": 83,
             "name": "DEVANG RITESH JITENDRA",
             "roll_no": "14",
             "prn_no": "U251H028",
@@ -3693,8 +3922,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 77,
-            "user_id": 79,
+            "id": 82,
+            "user_id": 84,
             "name": "DURANDE GITANJALI AMOL",
             "roll_no": "15",
             "prn_no": "U251H031",
@@ -3713,8 +3942,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 78,
-            "user_id": 80,
+            "id": 83,
+            "user_id": 85,
             "name": "GATE VAISHNAVI KAILAS",
             "roll_no": "16",
             "prn_no": "U251H033",
@@ -3733,8 +3962,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 79,
-            "user_id": 81,
+            "id": 84,
+            "user_id": 86,
             "name": "GAURAV RAMDAS BHUJBAL",
             "roll_no": "17",
             "prn_no": "U251H034",
@@ -3753,8 +3982,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 80,
-            "user_id": 82,
+            "id": 85,
+            "user_id": 87,
             "name": "GHARE SUSHANT PANDURANG",
             "roll_no": "18",
             "prn_no": "U251H037",
@@ -3773,8 +4002,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 81,
-            "user_id": 83,
+            "id": 86,
+            "user_id": 88,
             "name": "GIRASE JAYESH DAGESING",
             "roll_no": "19",
             "prn_no": "U251H039",
@@ -3793,8 +4022,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 82,
-            "user_id": 84,
+            "id": 87,
+            "user_id": 89,
             "name": "ISHAAN MILIND PARULEKAR",
             "roll_no": "20",
             "prn_no": "U251H041",
@@ -3813,8 +4042,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 83,
-            "user_id": 85,
+            "id": 88,
+            "user_id": 90,
             "name": "JADHAV PRANAV LAXMAN",
             "roll_no": "22",
             "prn_no": "U251H043",
@@ -3833,8 +4062,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 84,
-            "user_id": 86,
+            "id": 89,
+            "user_id": 91,
             "name": "JANGALE KANISHKA KUNDAN",
             "roll_no": "23",
             "prn_no": "U251H045",
@@ -3853,8 +4082,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 85,
-            "user_id": 87,
+            "id": 90,
+            "user_id": 92,
             "name": "JEER SUNSHRIYA HEMANT",
             "roll_no": "24",
             "prn_no": "U251H047",
@@ -3873,8 +4102,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 86,
-            "user_id": 88,
+            "id": 91,
+            "user_id": 93,
             "name": "KALGUNDE ATHARVA SANTOSH",
             "roll_no": "25",
             "prn_no": "U251H050",
@@ -3893,8 +4122,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 87,
-            "user_id": 89,
+            "id": 92,
+            "user_id": 94,
             "name": "KEDAR SUHANI RAMHARI",
             "roll_no": "26",
             "prn_no": "U251H052",
@@ -3913,8 +4142,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 88,
-            "user_id": 90,
+            "id": 93,
+            "user_id": 95,
             "name": "KEYUR SHAMDEV RAGHORTE",
             "roll_no": "27",
             "prn_no": "U251H053",
@@ -3933,8 +4162,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 89,
-            "user_id": 91,
+            "id": 94,
+            "user_id": 96,
             "name": "KOLE SANJAY BALAJI",
             "roll_no": "28",
             "prn_no": "U251H055",
@@ -3953,8 +4182,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 90,
-            "user_id": 92,
+            "id": 95,
+            "user_id": 97,
             "name": "KUMBHAR SARTHAK SACHIN",
             "roll_no": "29",
             "prn_no": "U251H058",
@@ -3973,8 +4202,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 91,
-            "user_id": 93,
+            "id": 96,
+            "user_id": 98,
             "name": "LINGADE ANUSHKA VISHAL",
             "roll_no": "30",
             "prn_no": "U251H059",
@@ -3993,8 +4222,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 92,
-            "user_id": 94,
+            "id": 97,
+            "user_id": 99,
             "name": "MALI MOKSHADA RAMESH",
             "roll_no": "31",
             "prn_no": "U251H061",
@@ -4013,8 +4242,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 93,
-            "user_id": 95,
+            "id": 98,
+            "user_id": 100,
             "name": "MANOJ DNYANOBA HALLE",
             "roll_no": "32",
             "prn_no": "U251H063",
@@ -4033,8 +4262,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 94,
-            "user_id": 96,
+            "id": 99,
+            "user_id": 101,
             "name": "MOHIT MODARAM CHOUDHARY",
             "roll_no": "33",
             "prn_no": "U251H066",
@@ -4053,8 +4282,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 95,
-            "user_id": 97,
+            "id": 100,
+            "user_id": 102,
             "name": "MORE DIVESH SUNIL",
             "roll_no": "34",
             "prn_no": "U251H068",
@@ -4073,8 +4302,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 96,
-            "user_id": 98,
+            "id": 101,
+            "user_id": 103,
             "name": "MUJMULE SAMIKSHA PRADIP",
             "roll_no": "35",
             "prn_no": "U251H069",
@@ -4093,8 +4322,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 97,
-            "user_id": 99,
+            "id": 102,
+            "user_id": 104,
             "name": "NAIR ARAVIND PRASANTH",
             "roll_no": "36",
             "prn_no": "U251H071",
@@ -4113,8 +4342,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 98,
-            "user_id": 100,
+            "id": 103,
+            "user_id": 105,
             "name": "NEWARE SHREYASH PRAMOD",
             "roll_no": "37",
             "prn_no": "U251H074",
@@ -4133,8 +4362,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 99,
-            "user_id": 101,
+            "id": 104,
+            "user_id": 106,
             "name": "NIKAM PAYAL SURESH",
             "roll_no": "38",
             "prn_no": "U251H075",
@@ -4153,8 +4382,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 100,
-            "user_id": 102,
+            "id": 105,
+            "user_id": 107,
             "name": "NIMJE YASH ASHOKRAO",
             "roll_no": "39",
             "prn_no": "U251H078",
@@ -4173,8 +4402,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 101,
-            "user_id": 103,
+            "id": 106,
+            "user_id": 108,
             "name": "OM VILAS RAUT",
             "roll_no": "40",
             "prn_no": "U251H081",
@@ -4193,8 +4422,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 102,
-            "user_id": 104,
+            "id": 107,
+            "user_id": 109,
             "name": "OVHAL PRANALI GANESH",
             "roll_no": "41",
             "prn_no": "U251H082",
@@ -4213,8 +4442,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 103,
-            "user_id": 105,
+            "id": 108,
+            "user_id": 110,
             "name": "PATIL MANISH MANOHAR",
             "roll_no": "42",
             "prn_no": "U251H084",
@@ -4233,8 +4462,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 104,
-            "user_id": 106,
+            "id": 109,
+            "user_id": 111,
             "name": "PAWAR SIDDHI LAXMAN",
             "roll_no": "43",
             "prn_no": "U251H086",
@@ -4253,8 +4482,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 105,
-            "user_id": 107,
+            "id": 110,
+            "user_id": 112,
             "name": "PRANAV AMIT SAHASRABUDDHE",
             "roll_no": "44",
             "prn_no": "U251H087",
@@ -4273,8 +4502,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 106,
-            "user_id": 108,
+            "id": 111,
+            "user_id": 113,
             "name": "PUJARI MITESH RAKESH",
             "roll_no": "45",
             "prn_no": "U251H090",
@@ -4293,8 +4522,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 107,
-            "user_id": 109,
+            "id": 112,
+            "user_id": 114,
             "name": "RAJPUT SURYADEVSING BHARATSING",
             "roll_no": "46",
             "prn_no": "U251H092",
@@ -4313,8 +4542,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 108,
-            "user_id": 110,
+            "id": 113,
+            "user_id": 115,
             "name": "RAKSHE VAISHNAVI KUNDLIK",
             "roll_no": "47",
             "prn_no": "U251H093",
@@ -4333,8 +4562,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 109,
-            "user_id": 111,
+            "id": 114,
+            "user_id": 116,
             "name": "RANE SHRUTI NANDKISHOR",
             "roll_no": "48",
             "prn_no": "U251H095",
@@ -4353,8 +4582,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 110,
-            "user_id": 112,
+            "id": 115,
+            "user_id": 117,
             "name": "SANER SAKSHI NILESH",
             "roll_no": "49",
             "prn_no": "U251H098",
@@ -4373,8 +4602,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 111,
-            "user_id": 113,
+            "id": 116,
+            "user_id": 118,
             "name": "SATHE BHARGAV YOGESH",
             "roll_no": "50",
             "prn_no": "U251H100",
@@ -4393,8 +4622,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 112,
-            "user_id": 114,
+            "id": 117,
+            "user_id": 119,
             "name": "SHINDE AMEY NAVNATH",
             "roll_no": "51",
             "prn_no": "U251H102",
@@ -4413,8 +4642,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 113,
-            "user_id": 115,
+            "id": 118,
+            "user_id": 120,
             "name": "SHINDE RITU DATTATRAY",
             "roll_no": "52",
             "prn_no": "U251H104",
@@ -4433,8 +4662,28 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 115,
-            "user_id": 117,
+            "id": 119,
+            "user_id": 121,
+            "name": "SHREYASH NITIN KHAJEKAR",
+            "roll_no": "53",
+            "prn_no": "U251H106",
+            "username": "U251H106",
+            "department_id": 1,
+            "semester_id": 1,
+            "division_id": 2,
+            "batch_id": 6,
+            "division_name": "SE(ECE)-B",
+            "batch_name": "B3",
+            "email": "",
+            "password_hash": "Student@123",
+            "status": "APPROVED",
+            "is_activated": false,
+            "must_change_credentials": true,
+            "is_logged_in": false
+        },
+        {
+            "id": 120,
+            "user_id": 122,
             "name": "SHUBHAM SHRISHAIL BOLAKOTAGI",
             "roll_no": "54",
             "prn_no": "U251H108",
@@ -4453,8 +4702,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 116,
-            "user_id": 118,
+            "id": 121,
+            "user_id": 123,
             "name": "SONONE KOMAL SURESH",
             "roll_no": "55",
             "prn_no": "U251H110",
@@ -4473,8 +4722,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 117,
-            "user_id": 119,
+            "id": 122,
+            "user_id": 124,
             "name": "SUNDARAM SANJAY PATHAK",
             "roll_no": "56",
             "prn_no": "U251H112",
@@ -4493,8 +4742,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 118,
-            "user_id": 120,
+            "id": 123,
+            "user_id": 125,
             "name": "TAKALE SARTHAK SACHIN",
             "roll_no": "57",
             "prn_no": "U251H113",
@@ -4513,8 +4762,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 119,
-            "user_id": 121,
+            "id": 124,
+            "user_id": 126,
             "name": "THIGALE SIDDHI KAILAS",
             "roll_no": "58",
             "prn_no": "U251H115",
@@ -4533,8 +4782,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 120,
-            "user_id": 122,
+            "id": 125,
+            "user_id": 127,
             "name": "TONDARE SAKSHI BASAWRAJ",
             "roll_no": "59",
             "prn_no": "U251H118",
@@ -4553,8 +4802,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 121,
-            "user_id": 123,
+            "id": 126,
+            "user_id": 128,
             "name": "TONGALE KETAN MURLIDHAR",
             "roll_no": "60",
             "prn_no": "U251H119",
@@ -4573,8 +4822,8 @@ INITIAL_DB_STATE = {
             "is_logged_in": false
         },
         {
-            "id": 122,
-            "user_id": 124,
+            "id": 127,
+            "user_id": 129,
             "name": "WAYAL PIYUSH SHASHIKANT",
             "roll_no": "61",
             "prn_no": "U251H121",
@@ -4594,15 +4843,927 @@ INITIAL_DB_STATE = {
         }
     ],
     "certificates": [],
+    "deleted_cert_ids": [],
+    "deleted_student_ids": [],
     "activity_records": [],
     "activity_subjects": [],
     "password_requests": [],
     "audit_logs": [],
-    "deleted_student_ids": [
-        "U251H007",
-        "U251H106",
-        "3",
-        "53"
+    "hod_pin": "1234",
+    "teachers": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "name": "Dr. Dhanashree Kulkarni",
+            "email": "dhanashree.kulkarni@nmiet.edu.in",
+            "teacher_id_code": "HOD101",
+            "department_id": 1,
+            "designation": "Head of Department"
+        },
+        {
+            "id": 2,
+            "user_id": 2,
+            "name": "Dr. Sagar Shinde",
+            "email": "sagar.shinde@campus.edu",
+            "teacher_id_code": "T102",
+            "department_id": 1,
+            "designation": "Professor"
+        },
+        {
+            "id": 3,
+            "user_id": 3,
+            "name": "Dr. Priyanka Patil",
+            "email": "priyanka.patil@campus.edu",
+            "teacher_id_code": "T103",
+            "department_id": 1,
+            "designation": "Associate Professor"
+        },
+        {
+            "id": 4,
+            "user_id": 4,
+            "name": "Ms. Dhanashree Dixit",
+            "email": "dhanashree.dixit@campus.edu",
+            "teacher_id_code": "T104",
+            "department_id": 1,
+            "designation": "Assistant Professor"
+        },
+        {
+            "id": 5,
+            "user_id": 5,
+            "name": "Ms. Muktai Surnar",
+            "email": "muktai.surnar@campus.edu",
+            "teacher_id_code": "T105",
+            "department_id": 1,
+            "designation": "Assistant Professor"
+        },
+        {
+            "id": 6,
+            "user_id": 6,
+            "name": "Mr. Vikas T.",
+            "email": "vikas.t@campus.edu",
+            "teacher_id_code": "T106",
+            "department_id": 1,
+            "designation": "Assistant Professor"
+        },
+        {
+            "id": 7,
+            "user_id": 7,
+            "name": "Ms. Sujata Gaikwad",
+            "email": "sujata.gaikwad@campus.edu",
+            "teacher_id_code": "T107",
+            "department_id": 1,
+            "designation": "Assistant Professor"
+        }
+    ],
+    "timetable": [
+        {
+            "id": 101,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 1,
+            "activity_type": "THEORY",
+            "subject_name": "Fundamental of Data Science",
+            "subject_code": "FDS-DD-TH-105",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 102,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 2,
+            "activity_type": "THEORY",
+            "subject_name": "Signals and Systems",
+            "subject_code": "SS-SS-TH-105",
+            "teacher_name": "Dr. Sagar Shinde",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 103,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-107",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 104,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Principles of Management & Entrepreneurship",
+            "subject_code": "PME-MS-TH-107",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 105,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A1-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 106,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A2-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 107,
+            "division_id": 1,
+            "day_of_week": "Monday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A3-DSA-DK-AC LAB",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "AC Lab-112",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 108,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B1-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 109,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B2-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 5,
+            "batch_name": "B2"
+        },
+        {
+            "id": 110,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B3-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 6,
+            "batch_name": "B3"
+        },
+        {
+            "id": 111,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Fundamental of Data Science",
+            "subject_code": "FDS-DD-TH-105",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 112,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Signals and Systems",
+            "subject_code": "SS-SS-TH-105",
+            "teacher_name": "Dr. Sagar Shinde",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 113,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Value Added Course",
+            "subject_code": "VEC-VF-TH-105",
+            "teacher_name": "Visiting Faculty",
+            "room_no": "Room-105",
+            "sub_slot": 1
+        },
+        {
+            "id": 114,
+            "division_id": 2,
+            "day_of_week": "Monday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Value Added Course",
+            "subject_code": "VEC-VF-TH-105",
+            "teacher_name": "Visiting Faculty",
+            "room_no": "Room-105",
+            "sub_slot": 2
+        },
+        {
+            "id": 201,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A1-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 202,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A2-DSA-DD-AC LAB",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "AC Lab-112",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 203,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A3-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 204,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Fundamental of Data Science",
+            "subject_code": "FDS-DD-TH-105",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 205,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 206,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Value Added Course",
+            "subject_code": "VEC-VF-TH-105",
+            "teacher_name": "Visiting Faculty",
+            "room_no": "Room-105",
+            "sub_slot": 1
+        },
+        {
+            "id": 207,
+            "division_id": 1,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Value Added Course",
+            "subject_code": "VEC-VF-TH-105",
+            "teacher_name": "Visiting Faculty",
+            "room_no": "Room-105",
+            "sub_slot": 2
+        },
+        {
+            "id": 208,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 1,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 209,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 2,
+            "activity_type": "THEORY",
+            "subject_name": "Data Structures and Algorithms",
+            "subject_code": "DS-DK-TH-105",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 210,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Principles of Management & Entrepreneurship",
+            "subject_code": "PME-MS-TH-107",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 211,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Semiconductor Devices & Circuits",
+            "subject_code": "SDC-PP-TH-107",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 212,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B1-DSA-DK-AC LAB",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "AC Lab-112",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 213,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B2-DSA-DK-AC LAB",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "AC Lab-112",
+            "batch_id": 5,
+            "batch_name": "B2"
+        },
+        {
+            "id": 214,
+            "division_id": 2,
+            "day_of_week": "Tuesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B3-VSEC-SG/DD-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad / Ms. Dhanashree Dixit",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 6,
+            "batch_name": "B3"
+        },
+        {
+            "id": 301,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 1,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 302,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 2,
+            "activity_type": "THEORY",
+            "subject_name": "Data Structures and Algorithms",
+            "subject_code": "DS-DK-TH-105",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 303,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A1-VSEC-SG/DD-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 304,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A2-VSEC-SG/DD-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 305,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A3-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 306,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A1-DSA-MS-AC LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "AC Lab-112",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 307,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A2-DSA-MS-AC LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "AC Lab-112",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 308,
+            "division_id": 1,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A3-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 309,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B1-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 310,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B2-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 5,
+            "batch_name": "B2"
+        },
+        {
+            "id": 311,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B3-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 6,
+            "batch_name": "B3"
+        },
+        {
+            "id": 312,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course (Tutorial)",
+            "subject_code": "OEC-VG-TUT-107",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 313,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Semiconductor Devices & Circuits",
+            "subject_code": "SDC-PP-TH-105",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 314,
+            "division_id": 2,
+            "day_of_week": "Wednesday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Library",
+            "subject_code": "Library",
+            "teacher_name": "Faculty",
+            "room_no": "Central Library"
+        },
+        {
+            "id": 401,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 1,
+            "activity_type": "THEORY",
+            "subject_name": "Semiconductor Devices & Circuits",
+            "subject_code": "SDC-PP-TH-105",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 402,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 2,
+            "activity_type": "THEORY",
+            "subject_name": "Signals and Systems",
+            "subject_code": "SS-SS-TH-105",
+            "teacher_name": "Dr. Sagar Shinde",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 403,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A1-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 404,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "A2-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 405,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 4,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A3-DSA-DD-AD LAB",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "AC Lab-112",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 406,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105",
+            "sub_slot": 1
+        },
+        {
+            "id": 407,
+            "division_id": 1,
+            "day_of_week": "Thursday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Principles of Management & Entrepreneurship",
+            "subject_code": "PME-MS-TH-107",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "Room-107",
+            "sub_slot": 2
+        },
+        {
+            "id": 408,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "B1-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 409,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B2-SDC-MS-SES LAB",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "SES Lab-108",
+            "batch_id": 5,
+            "batch_name": "B2"
+        },
+        {
+            "id": 410,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B3-DSA-DD-ID LAB",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "ID Lab-104",
+            "batch_id": 6,
+            "batch_name": "B3"
+        },
+        {
+            "id": 411,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Data Structures and Algorithms",
+            "subject_code": "DS-DK-TH-105",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 412,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course (Tutorial)",
+            "subject_code": "OEC-VG-TUT-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 413,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B1-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 414,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B2-DSA-MS-SG AC LAB",
+            "teacher_name": "Ms. Muktai Surnar / Ms. Sujata Gaikwad",
+            "room_no": "AC Lab-112",
+            "batch_id": 5,
+            "batch_name": "B2"
+        },
+        {
+            "id": 415,
+            "division_id": 2,
+            "day_of_week": "Thursday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B3-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 6,
+            "batch_name": "B3"
+        },
+        {
+            "id": 501,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "A1-DSA-DD-ID LAB",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "ID Lab-104",
+            "batch_id": 1,
+            "batch_name": "A1"
+        },
+        {
+            "id": 502,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A2-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 2,
+            "batch_name": "A2"
+        },
+        {
+            "id": 503,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 1,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Vocational & Skill Enhancement Course Lab",
+            "subject_code": "A3-VSEC-SG-ID/AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "ID/AC Lab-104",
+            "batch_id": 3,
+            "batch_name": "A3"
+        },
+        {
+            "id": 504,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Data Structures and Algorithms",
+            "subject_code": "DS-DK-TH-107",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 505,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Fundamental of Data Science",
+            "subject_code": "FDS-DD-TH-105",
+            "teacher_name": "Ms. Dhanashree Dixit",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 506,
+            "division_id": 1,
+            "day_of_week": "Friday",
+            "time_slot_id": 7,
+            "activity_type": "THEORY",
+            "subject_name": "Library",
+            "subject_code": "Library",
+            "teacher_name": "Faculty",
+            "room_no": "Central Library"
+        },
+        {
+            "id": 507,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 1,
+            "activity_type": "THEORY",
+            "subject_name": "Open Elective Course",
+            "subject_code": "OEC-VG-TH-105",
+            "teacher_name": "Mr. Vikas T.",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 508,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 2,
+            "activity_type": "THEORY",
+            "subject_name": "Signals and Systems",
+            "subject_code": "SS-SS-TH-105",
+            "teacher_name": "Dr. Sagar Shinde",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 509,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 4,
+            "activity_type": "THEORY",
+            "subject_name": "Semiconductor Devices & Circuits",
+            "subject_code": "SDC-PP-TH-105",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "Room-105"
+        },
+        {
+            "id": 510,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 5,
+            "activity_type": "THEORY",
+            "subject_name": "Principles of Management & Entrepreneurship",
+            "subject_code": "PME-MS-TH-107",
+            "teacher_name": "Ms. Muktai Surnar",
+            "room_no": "Room-107"
+        },
+        {
+            "id": 511,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B1-DSA-DK-AC LAB",
+            "teacher_name": "Dr. Dhanashree Kulkarni",
+            "room_no": "AC Lab-112",
+            "batch_id": 4,
+            "batch_name": "B1"
+        },
+        {
+            "id": 512,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Semiconductor Devices & Circuits Lab",
+            "subject_code": "B2-SDC-PP-SES LAB",
+            "teacher_name": "Dr. Priyanka Patil",
+            "room_no": "SES Lab-108",
+            "batch_id": 5,
+            "batch_name": "B5"
+        },
+        {
+            "id": 513,
+            "division_id": 2,
+            "day_of_week": "Friday",
+            "time_slot_id": 7,
+            "activity_type": "PRACTICAL",
+            "subject_name": "Data Structures & Algorithms Lab",
+            "subject_code": "B3-DSA-SG-AC LAB",
+            "teacher_name": "Ms. Sujata Gaikwad",
+            "room_no": "AC Lab-112",
+            "batch_id": 6,
+            "batch_name": "B3"
+        }
     ]
 }
 
