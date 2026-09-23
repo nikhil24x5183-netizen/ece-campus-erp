@@ -338,6 +338,11 @@ const App = {
       </a>
     `).join('');
 
+    // Auto-close mobile drawer when any navigation link is clicked
+    navContainer.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => this.closeMobileMenu());
+    });
+
     const btnHodPass = document.getElementById('btn-hod-change-pass-nav');
     if (btnHodPass) {
       btnHodPass.style.display = (role === 'HOD' || role === 'TEACHER') ? 'inline-flex' : 'none';
@@ -354,6 +359,19 @@ const App = {
     document.getElementById('btn-logout').onclick = () => {
       this.logout();
     };
+
+    const btnSidebarLogout = document.getElementById('btn-sidebar-logout');
+    if (btnSidebarLogout) {
+      btnSidebarLogout.onclick = () => {
+        this.closeMobileMenu();
+        this.logout();
+      };
+    }
+
+    const btnSidebarClose = document.getElementById('btn-sidebar-mobile-close');
+    if (btnSidebarClose) {
+      btnSidebarClose.onclick = () => this.closeMobileMenu();
+    }
 
     const btnMobileMenu = document.getElementById('btn-mobile-menu-toggle');
     if (btnMobileMenu) {

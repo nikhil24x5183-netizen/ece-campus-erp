@@ -18,8 +18,8 @@
   <!-- SheetJS Excel Library -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="./static/css/main.css?v=185">
-  <link rel="stylesheet" href="./static/css/timetable.css?v=185">
+  <link rel="stylesheet" href="./static/css/main.css?v=200">
+  <link rel="stylesheet" href="./static/css/timetable.css?v=200">
 </head>
 <body>
   <!-- Mobile Backdrop Overlay -->
@@ -36,6 +36,9 @@
           <h2>ECE Management</h2>
           <span>Student & Activity Portal</span>
         </div>
+        <button class="sidebar-mobile-close" id="btn-sidebar-mobile-close" onclick="App.closeMobileMenu()" title="Close Navigation Drawer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <nav class="sidebar-nav" id="sidebar-nav">
@@ -49,6 +52,11 @@
             <h4 id="user-display-name">Loading...</h4>
             <span id="user-display-role">ROLE</span>
           </div>
+        </div>
+        <div class="sidebar-footer-actions">
+          <button type="button" class="btn btn-sidebar-logout" id="btn-sidebar-logout" onclick="App.closeMobileMenu(); App.logout();" title="Sign out of account">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+          </button>
         </div>
       </div>
     </aside>
@@ -367,16 +375,16 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- JavaScript Modules with Cache Buster v=185 -->
-  <script src="./static/js/api.js?v=185"></script>
-  <script src="./static/js/utils/toast.js?v=185"></script>
-  <script src="./static/js/utils/exporter.js?v=185"></script>
-  <script src="./static/js/views/auth.js?v=185"></script>
-  <script src="./static/js/views/student.js?v=185"></script>
-  <script src="./static/js/views/teacher.js?v=185"></script>
-  <script src="./static/js/views/hod.js?v=185"></script>
-  <script src="./static/js/views/timetable.js?v=185"></script>
-  <script src="./static/js/views/reports.js?v=185"></script>
-  <script src="./static/js/app.js?v=185"></script>
+  <!-- JavaScript Modules with Cache Buster v=95000 -->
+  <script src="./static/js/api.js?v=95000"></script>
+  <script src="./static/js/utils/toast.js?v=95000"></script>
+  <script src="./static/js/utils/exporter.js?v=95000"></script>
+  <script src="./static/js/views/auth.js?v=95000"></script>
+  <script src="./static/js/views/student.js?v=95000"></script>
+  <script src="./static/js/views/teacher.js?v=95000"></script>
+  <script src="./static/js/views/hod.js?v=95000"></script>
+  <script src="./static/js/views/timetable.js?v=95000"></script>
+  <script src="./static/js/views/reports.js?v=95000"></script>
+  <script src="./static/js/app.js?v=95000"></script>
 </body>
 </html>
