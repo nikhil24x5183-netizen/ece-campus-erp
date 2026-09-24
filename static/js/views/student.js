@@ -280,8 +280,8 @@ const StudentView = {
                 </table>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; font-size: 0.75rem; color: #64748b;">
-                <span><i class="fa-solid fa-shield-halved" style="color: #16a34a;"></i> Approved by: <strong>${act.approved_by}</strong></span>
-                <span><i class="fa-solid fa-clock-rotate-left"></i> Verified on: <strong>${act.approved_at}</strong></span>
+                <span><i class="fa-solid fa-shield-halved" style="color: #16a34a;"></i> Approved by: <strong>${act.approved_by || 'Dr. Dhanashree Kulkarni (HOD)'}</strong></span>
+                <span><i class="fa-solid fa-clock-rotate-left"></i> Verified on: <strong>${act.approved_at || act.activity_date || 'Verified'}</strong></span>
               </div>
             </div>
           </div>
@@ -510,8 +510,9 @@ const StudentView = {
             </div>
 
             <div class="form-group">
-              <label>Certificate Event Date <span style="color: var(--accent-rose);">*</span></label>
-              <input type="date" id="page-cert-date" class="form-control" max="${todayStr}" required>
+              <label>Certificate Event Date <span style="color: var(--accent-rose);">*</span> <small style="color: var(--text-muted); font-size: 0.78rem;">(Monday – Friday only)</small></label>
+              <input type="date" id="page-cert-date" class="form-control" max="${todayStr}" onchange="StudentView.validateWeekday(this)" oninput="StudentView.validateWeekday(this)" required>
+              <small style="color: #64748b; font-size: 0.76rem; display: block; margin-top: 0.25rem;"><i class="fa-solid fa-calendar-xmark" style="color: #d97706;"></i> Saturdays & Sundays are non-instructional days and cannot be selected.</small>
             </div>
 
             <div class="form-group">
@@ -561,6 +562,21 @@ const StudentView = {
       statusMsg.style.color = '#15803d';
       statusMsg.innerHTML = `<i class="fa-solid fa-circle-check"></i> Selected: <strong>${file.name}</strong> (${sizeMb} MB) — Ready for submission.`;
     }
+  },
+
+  validateWeekday(input) {
+    if (!input || !input.value) return true;
+    const parts = input.value.split('-').map(Number);
+    if (parts.length === 3) {
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      const day = d.getDay();
+      if (day === 0 || day === 6) {
+        input.value = '';
+        Toast.warning('Saturdays and Sundays cannot be selected. College academic schedule runs Monday through Friday. Please choose a weekday.');
+        return false;
+      }
+    }
+    return true;
   },
 
   compressImageFile(file, callback) {
@@ -702,7 +718,21 @@ const StudentView = {
       if (progressBar) progressBar.style.width = '45%';
     }
 
-    const certDate = document.getElementById('page-cert-date').value;
+    const certDateInput = document.getElementById('page-cert-date');
+    const certDate = certDateInput ? certDateInput.value : '';
+    if (certDate) {
+      const parts = certDate.split('-').map(Number);
+      if (parts.length === 3) {
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        const dayOfWeek = d.getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          Toast.error('Invalid Date: Saturdays and Sundays are non-instructional days and cannot be selected. Please choose a Monday–Friday date.');
+          if (certDateInput) certDateInput.value = '';
+          return;
+        }
+      }
+    }
+
     const nowLocal = new Date();
     const year = nowLocal.getFullYear();
     const month = String(nowLocal.getMonth() + 1).padStart(2, '0');
@@ -769,14 +799,36 @@ const StudentView = {
 
         return `
           <tr>
-            <td><strong>${c.title}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${c.description || ''}</span></td>
+            <td>
+              <strong>${c.title}</strong>
+              ${c.description ? `
+                <div style="font-size: 0.78rem; color: #475569; margin-top: 0.25rem; background: #f8fafc; padding: 0.3rem 0.5rem; border-radius: 4px; border-left: 2.5px solid var(--primary); line-height: 1.4;">
+                  <strong style="color: #1e40af;"><i class="fa-solid fa-file-lines"></i> Detail:</strong> ${c.description}
+                </div>
+              ` : ''}
+            </td>
             <td>${c.event_name}</td>
             <td><span class="badge-role role-STUDENT">${c.category}</span></td>
             <td>${c.certificate_date}</td>
             <td>
               <span class="badge-status status-${c.status}">${c.status}</span>
-              ${c.status === 'REJECTED' && c.rejection_reason ? `<div style="font-size: 0.72rem; color: var(--accent-rose); margin-top: 0.2rem;">Reason: ${c.rejection_reason}</div>` : ''}
-              ${c.status === 'APPROVED' ? `<div style="font-size: 0.72rem; color: #15803d; font-weight: 700; margin-top: 0.2rem;"><i class="fa-solid fa-circle-check"></i> Attendance Credited</div>` : ''}
+              ${c.status === 'APPROVED' ? `
+                <div style="font-size: 0.75rem; color: #15803d; font-weight: 700; margin-top: 0.25rem;">
+                  <i class="fa-solid fa-circle-check"></i> Approved by: <strong>${c.approved_by || c.verified_by || 'Dr. Dhanashree Kulkarni (HOD)'}</strong>
+                </div>
+                <div style="font-size: 0.7rem; color: #166534; font-weight: 600;">Attendance Credited</div>
+              ` : ''}
+              ${c.status === 'REJECTED' ? `
+                <div style="font-size: 0.75rem; color: #b91c1c; font-weight: 700; margin-top: 0.25rem;">
+                  <i class="fa-solid fa-circle-xmark"></i> Rejected by: <strong>${c.rejected_by || c.verified_by || c.approved_by || 'Faculty Reviewer'}</strong>
+                </div>
+                ${c.rejection_reason ? `<div style="font-size: 0.72rem; color: var(--accent-rose); margin-top: 0.15rem;">Reason: ${c.rejection_reason}</div>` : ''}
+              ` : ''}
+              ${c.status === 'PENDING' ? `
+                <div style="font-size: 0.72rem; color: #b45309; margin-top: 0.25rem;">
+                  <i class="fa-solid fa-clock"></i> Awaiting Faculty Review
+                </div>
+              ` : ''}
             </td>
             <td>
               <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center;">
@@ -960,7 +1012,69 @@ const StudentView = {
       displayContent = this.getSampleCertificateHTML(certTitle || titleText, studentName || 'Student');
     }
 
-    body.innerHTML = displayContent;
+    const dbCerts = (typeof getLocalDB === 'function' ? getLocalDB() : { certificates: [] }).certificates || [];
+    const certRecord = dbCerts.find(c =>
+      (certId && String(c.id) === String(certId)) ||
+      (fileName && c.file_name === fileName) ||
+      (certTitle && c.title === certTitle) ||
+      (studentName && c.student_name === studentName)
+    );
+
+    let metaBox = '';
+    if (certRecord) {
+      const isApproved = certRecord.status === 'APPROVED';
+      const isRejected = certRecord.status === 'REJECTED';
+      const verifierName = isApproved 
+        ? (certRecord.approved_by || certRecord.verified_by || 'Dr. Dhanashree Kulkarni (HOD)')
+        : (certRecord.rejected_by || certRecord.verified_by || certRecord.approved_by || 'Faculty Reviewer');
+
+      metaBox = `
+        <div style="margin-top: 1.25rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 1rem 1.25rem; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <div>
+              <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">${certRecord.title || titleText}</h4>
+              <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;">
+                <i class="fa-solid fa-trophy" style="color: #2563eb;"></i> Event: <strong>${certRecord.event_name || 'N/A'}</strong> (${certRecord.category || 'Co-Curricular'}) &nbsp;|&nbsp;
+                <i class="fa-regular fa-calendar"></i> Date: <strong>${certRecord.certificate_date || 'N/A'}</strong>
+              </div>
+            </div>
+            <div>
+              ${isApproved ? `
+                <span class="badge-status status-APPROVED" style="font-weight: 800; background: #dcfce7; color: #15803d; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                  <i class="fa-solid fa-circle-check"></i> Approved by: <strong>${verifierName}</strong>
+                </span>
+              ` : (isRejected ? `
+                <span class="badge-status status-REJECTED" style="font-weight: 800; background: #fee2e2; color: #b91c1c; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                  <i class="fa-solid fa-circle-xmark"></i> Rejected by: <strong>${verifierName}</strong>
+                </span>
+              ` : `
+                <span class="badge-status status-PENDING" style="font-weight: 800; background: #fef3c7; color: #d97706; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                  <i class="fa-solid fa-clock"></i> Awaiting Review
+                </span>
+              `)}
+            </div>
+          </div>
+
+          <!-- Student Written Description -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 0.95rem; margin-top: 0.5rem;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 0.25rem;">
+              <i class="fa-solid fa-align-left"></i> Student Description / Activity Details:
+            </div>
+            <div style="font-size: 0.88rem; color: #334155; line-height: 1.5; white-space: pre-wrap; font-weight: 500;">
+              ${certRecord.description ? certRecord.description : '<em style="color: #94a3b8;">No additional details were provided by the student for this submission.</em>'}
+            </div>
+          </div>
+
+          ${isRejected && certRecord.rejection_reason ? `
+            <div style="margin-top: 0.5rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.82rem; color: #b91c1c;">
+              <strong>Rejection Reason:</strong> ${certRecord.rejection_reason}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    body.innerHTML = displayContent + metaBox;
   },
 
   getSampleCertificateHTML(title = 'National Technical Conference 2026', student = 'Nikhil Verma') {

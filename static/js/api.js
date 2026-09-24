@@ -6173,6 +6173,30 @@ const API = {
 
       if (!user) throw { message: 'Account not found. Please enter your PRN Number or registered Email.' };
 
+      // Security Enforcement: HOD/Faculty vs Division A vs Division B
+      if (portal === 'HOD') {
+        if (user.role !== 'HOD' && user.role !== 'TEACHER') {
+          throw { message: 'Access Denied: The HOD & Faculty section is strictly reserved for faculty and administration. Students must select Division A or Division B.' };
+        }
+      } else {
+        // portal is DIV_A or DIV_B
+        if (user.role === 'HOD' || user.role === 'TEACHER') {
+          throw { message: 'Access Denied: HOD and Faculty accounts can only log in through the "HOD & Faculty Portal" option.' };
+        }
+
+        const student = findCurrentStudent(db, user) || user;
+        const divName = (student.division_name || user.division_name || '').toUpperCase();
+        const divId = student.division_id || user.division_id;
+        const isDivB = divName.includes('B') || divId == 2;
+
+        if (portal === 'DIV_A' && isDivB) {
+          throw { message: 'Access Denied: You are enrolled in Division B. Please select the Division B login option.' };
+        }
+        if (portal === 'DIV_B' && !isDivB) {
+          throw { message: 'Access Denied: You are enrolled in Division A. Please select the Division A login option.' };
+        }
+      }
+
       const userPass = (user.password_hash || '').trim();
       if (userPass !== password) {
         throw { message: 'Invalid password. Please check your credentials.' };
@@ -6180,7 +6204,8 @@ const API = {
 
       setSessionUser(user);
       const student = findCurrentStudent(db, user);
-      return { token: 'jwt_' + user.id + '_' + Date.now(), user, profile: student || user };
+      const redirect = (user.role === 'HOD' || user.role === 'TEACHER') ? '#/hod/dashboard' : '#/student/dashboard';
+      return { token: 'jwt_' + user.id + '_' + Date.now(), user, profile: student || user, redirect };
     }
 
     // 3. POST /api/auth/logout
@@ -6437,6 +6462,9 @@ const API = {
           event_name: c.event_name,
           activity_date: c.certificate_date,
           day_of_week: 'Monday',
+          approved_by: c.approved_by || c.verified_by || 'Dr. Dhanashree Kulkarni (HOD)',
+          approved_at: c.approved_at ? new Date(c.approved_at).toLocaleDateString() : (c.certificate_date || 'Verified'),
+          lecture_count: c.credited_lectures_count || 5,
           slot_details: []
         })),
         slot_details: [],
@@ -6557,9 +6585,16 @@ const API = {
         total_credits = reqCredits;
       }
 
+      const approverName = (currentUser && currentUser.name) ? currentUser.name : (
+        (typeof App !== 'undefined' && App.currentUser && App.currentUser.name) ? App.currentUser.name : (
+          (typeof App !== 'undefined' && App.currentProfile && App.currentProfile.name) ? App.currentProfile.name : 'Dr. Dhanashree Kulkarni (HOD)'
+        )
+      );
+
       cert.status = 'APPROVED';
       cert.approved_at = new Date().toISOString();
-      cert.approved_by = currentUser ? currentUser.name : 'HOD';
+      cert.approved_by = approverName;
+      cert.verified_by = approverName;
       cert.credited_lectures_count = total_credits;
       cert.subject_credits = subject_credits;
 
@@ -6583,8 +6618,18 @@ const API = {
       const cert = (db.certificates || []).find(c => String(c.id) === String(certId));
       if (!cert) throw { message: 'Certificate not found' };
 
+      const reviewerName = (currentUser && currentUser.name) ? currentUser.name : (
+        (typeof App !== 'undefined' && App.currentUser && App.currentUser.name) ? App.currentUser.name : (
+          (typeof App !== 'undefined' && App.currentProfile && App.currentProfile.name) ? App.currentProfile.name : 'Dr. Dhanashree Kulkarni (HOD)'
+        )
+      );
+
       cert.status = 'REJECTED';
-      cert.rejection_reason = body.reason || 'Rejected by HOD';
+      cert.rejection_reason = body.reason || 'Rejected by Faculty/HOD';
+      cert.rejected_by = reviewerName;
+      cert.verified_by = reviewerName;
+      cert.approved_by = reviewerName;
+      cert.rejected_at = new Date().toISOString();
       saveLocalDB(db);
 
       try {

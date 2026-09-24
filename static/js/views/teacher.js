@@ -273,7 +273,15 @@ const TeacherView = {
             <span style="font-size: 0.75rem; color: var(--text-muted);">Roll: ${c.roll_no} | PRN: ${c.prn_no}</span>
           </td>
           <td><span class="badge-role role-STUDENT" style="background: #eff6ff; color: var(--primary); font-weight: 800;">${c.division_name} (${c.batch_name})</span></td>
-          <td><strong>${c.title}</strong><br><span style="font-size: 0.75rem; color: var(--primary);">${c.event_name} (${c.category})</span></td>
+          <td>
+            <strong>${c.title}</strong><br>
+            <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">${c.event_name} (${c.category})</span>
+            ${c.description ? `
+              <div style="margin-top: 0.4rem; font-size: 0.8rem; color: #1e293b; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.4rem 0.65rem; border-radius: 6px; line-height: 1.45;">
+                <strong style="color: #166534;"><i class="fa-solid fa-file-lines"></i> Student Detail:</strong> ${c.description}
+              </div>
+            ` : '<div style="margin-top: 0.25rem; font-size: 0.72rem; color: #94a3b8; font-style: italic;">No extra description provided</div>'}
+          </td>
           <td>${c.certificate_date}</td>
           <td><span class="badge-status status-PENDING" style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; font-weight: 800;"><i class="fa-solid fa-clock"></i> Awaiting Review</span></td>
           <td>
@@ -305,19 +313,33 @@ const TeacherView = {
               <span style="font-size: 0.75rem; color: var(--text-muted);">Roll: ${c.roll_no} | PRN: ${c.prn_no}</span>
             </td>
             <td><span class="badge-role role-STUDENT" style="background: #eff6ff; color: var(--primary); font-weight: 800;">${c.division_name} (${c.batch_name})</span></td>
-            <td><strong>${c.title}</strong><br><span style="font-size: 0.75rem; color: var(--primary);">${c.event_name} (${c.category})</span></td>
+            <td>
+              <strong>${c.title}</strong><br>
+              <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">${c.event_name} (${c.category})</span>
+              ${c.description ? `
+                <div style="margin-top: 0.4rem; font-size: 0.8rem; color: #334155; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.35rem 0.6rem; border-radius: 6px; line-height: 1.4;">
+                  <strong style="color: #475569;"><i class="fa-solid fa-file-lines"></i> Student Detail:</strong> ${c.description}
+                </div>
+              ` : ''}
+            </td>
             <td>${c.certificate_date}</td>
             <td>
               ${isAppr ? `
                 <span class="badge-status status-APPROVED" style="font-weight: 800; background: #dcfce7; color: #15803d; padding: 0.35rem 0.6rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.3rem;">
                   <i class="fa-solid fa-circle-check"></i> Approved
                 </span>
-                <div style="font-size: 0.72rem; color: #166534; font-weight: 700; margin-top: 0.2rem;">Attendance Credited</div>
+                <div style="font-size: 0.74rem; color: #166534; font-weight: 700; margin-top: 0.25rem;">
+                  By: <strong>${c.approved_by || c.verified_by || 'Dr. Dhanashree Kulkarni (HOD)'}</strong>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">Attendance Credited</div>
               ` : `
                 <span class="badge-status status-REJECTED" style="font-weight: 800; background: #fee2e2; color: #b91c1c; padding: 0.35rem 0.6rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.3rem;">
                   <i class="fa-solid fa-circle-xmark"></i> Rejected
                 </span>
-                ${c.rejection_reason ? `<div style="font-size: 0.72rem; color: #b91c1c; margin-top: 0.2rem;">${c.rejection_reason}</div>` : ''}
+                <div style="font-size: 0.74rem; color: #b91c1c; font-weight: 700; margin-top: 0.25rem;">
+                  By: <strong>${c.rejected_by || c.verified_by || c.approved_by || 'Faculty Reviewer'}</strong>
+                </div>
+                ${c.rejection_reason ? `<div style="font-size: 0.72rem; color: #b91c1c; margin-top: 0.2rem;">Reason: ${c.rejection_reason}</div>` : ''}
               `}
             </td>
             <td>
@@ -743,6 +765,23 @@ const TeacherView = {
           </div>
         </div>
 
+        <!-- Student's Written Description & Activity Details -->
+        <div style="background: #ffffff; border: 1.5px solid #93c5fd; border-radius: var(--radius-md); padding: 0.95rem 1.15rem; box-shadow: 0 2px 6px rgba(37,99,235,0.06);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.45rem;">
+            <div style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.5px;">
+              <i class="fa-solid fa-align-left" style="color: #2563eb;"></i> Student's Submitted Description / Activity Details:
+            </div>
+            ${s.cert.file_url ? `
+              <button type="button" class="btn btn-secondary btn-sm" onclick="StudentView.previewFile('${s.cert.file_url || ''}', '${s.cert.file_name || s.cert.title}', '${(s.cert.title || '').replace(/'/g, "\\'")}', '${(s.cert.student_name || '').replace(/'/g, "\\'")}', '${s.cert.id}')" style="font-size: 0.76rem; padding: 0.25rem 0.55rem; font-weight: 700;">
+                <i class="fa-solid fa-file-image"></i> View Uploaded File
+              </button>
+            ` : ''}
+          </div>
+          <div style="font-size: 0.92rem; color: #0f172a; background: #f8fafc; padding: 0.8rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; line-height: 1.55; white-space: pre-wrap; font-weight: 600;">
+            ${s.cert.description ? s.cert.description : '<span style="color: #94a3b8; font-weight: 400; font-style: italic;">No additional description was provided by the student for this submission.</span>'}
+          </div>
+        </div>
+
         <!-- Event Duration / Number of Days Selector -->
         <div style="background: #ffffff; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem;">
@@ -988,10 +1027,14 @@ const TeacherView = {
   },
 
   async openRejectModal(certId) {
-    const reason = prompt('Enter rejection reason for this certificate submission:', 'Incomplete / Invalid Document');
+    const db = typeof getLocalDB === 'function' ? getLocalDB() : { certificates: [] };
+    const cert = (db.certificates || []).find(c => String(c.id) === String(certId) || c.id === parseInt(certId)) || {};
+    const certDesc = cert.description ? `\n\nStudent's Submitted Description:\n"${cert.description}"` : '';
+    const promptMsg = `Certificate Submission: "${cert.title || 'Certificate'}"${certDesc}\n\nEnter rejection reason:`;
+    const reason = prompt(promptMsg, 'Incomplete / Invalid Document');
     if (reason === null) return;
     try {
-      const res = await API.post(`/api/teacher/certificates/${certId}/reject`, { reason: reason || 'Rejected by HOD' });
+      const res = await API.post(`/api/teacher/certificates/${certId}/reject`, { reason: reason || 'Rejected by Faculty/HOD' });
       Toast.success((res && res.message) || 'Certificate rejected.');
       if (window.App && App.updateBadges) await App.updateBadges();
       const container = document.getElementById('view-container');

@@ -616,8 +616,9 @@
             </div>
 
             <div class="form-group">
-              <label>Certificate Event Date <span style="color: var(--accent-rose);">*</span></label>
-              <input type="date" id="recovery-cert-date" class="form-control" required>
+              <label>Certificate Event Date <span style="color: var(--accent-rose);">*</span> <small style="color: var(--text-muted); font-size: 0.78rem;">(Monday – Friday only)</small></label>
+              <input type="date" id="recovery-cert-date" class="form-control" onchange="StudentView.validateWeekday(this)" oninput="StudentView.validateWeekday(this)" required>
+              <small style="color: #64748b; font-size: 0.76rem; display: block; margin-top: 0.25rem;"><i class="fa-solid fa-calendar-xmark" style="color: #d97706;"></i> Saturdays & Sundays are non-instructional days and cannot be selected.</small>
             </div>
 
             <div class="form-group">
@@ -662,16 +663,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
-  <!-- JavaScript Modules with Cache Buster v=95000 -->
-  <script src="./static/js/api.js?v=95000"></script>
-  <script src="./static/js/utils/toast.js?v=95000"></script>
-  <script src="./static/js/utils/exporter.js?v=95000"></script>
-  <script src="./static/js/views/auth.js?v=95000"></script>
-  <script src="./static/js/views/student.js?v=95000"></script>
-  <script src="./static/js/views/teacher.js?v=95000"></script>
-  <script src="./static/js/views/hod.js?v=95000"></script>
-  <script src="./static/js/views/timetable.js?v=95000"></script>
-  <script src="./static/js/views/reports.js?v=95000"></script>
-  <script src="./static/js/app.js?v=95000"></script>
+  <!-- JavaScript Modules with Cache Buster v=96000 -->
+  <script src="./static/js/api.js?v=96000"></script>
+  <script src="./static/js/utils/toast.js?v=96000"></script>
+  <script src="./static/js/utils/exporter.js?v=96000"></script>
+  <script src="./static/js/views/auth.js?v=96000"></script>
+  <script src="./static/js/views/student.js?v=96000"></script>
+  <script src="./static/js/views/teacher.js?v=96000"></script>
+  <script src="./static/js/views/hod.js?v=96000"></script>
+  <script src="./static/js/views/timetable.js?v=96000"></script>
+  <script src="./static/js/views/reports.js?v=96000"></script>
+  <script src="./static/js/app.js?v=96000"></script>
 </body>
 </html>

@@ -66,7 +66,7 @@ const AuthView = {
               <button type="button" id="btn-login-option-hod" onclick="AuthView.selectLoginPortal('HOD')"
                 style="padding: 0.65rem 0.75rem; border-radius: var(--radius-md); font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.4rem; ${ selectedPortal === 'HOD' ? 'background: linear-gradient(135deg, #16a34a, #15803d); color: #ffffff; border: 2px solid #166534; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);' : 'background: #f8fafc; color: var(--text-main); border: 1.5px solid var(--border-color);' }">
                 <i class="fa-solid ${ selectedPortal === 'HOD' ? 'fa-shield-halved' : 'fa-chalkboard-user' }"></i>
-                <span>HOD / Department Head Portal</span>
+                <span>HOD & Faculty Portal</span>
               </button>
             </div>
           </div>
@@ -291,7 +291,7 @@ const AuthView = {
       btnHod.style.color = 'var(--text-main)';
       btnHod.style.border = '1.5px solid var(--border-color)';
       btnHod.style.boxShadow = 'none';
-      btnHod.innerHTML = '<i class="fa-solid fa-chalkboard-user"></i> <span>HOD / Department Head Portal</span>';
+      btnHod.innerHTML = '<i class="fa-solid fa-chalkboard-user"></i> <span>HOD & Faculty Portal</span>';
     }
 
     if (portalType === 'DIV_A' && btnA) {
@@ -311,7 +311,7 @@ const AuthView = {
       btnHod.style.color = '#ffffff';
       btnHod.style.border = '2px solid #166534';
       btnHod.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.35)';
-      btnHod.innerHTML = '<i class="fa-solid fa-shield-halved"></i> <span>HOD / Department Head Portal</span>';
+      btnHod.innerHTML = '<i class="fa-solid fa-shield-halved"></i> <span>HOD & Faculty Portal</span>';
     }
   },
 
@@ -381,7 +381,7 @@ const AuthView = {
       App.currentProfile = meData.profile;
 
       App.setupNavigation();
-      window.location.hash = res.redirect;
+      window.location.hash = res.redirect || ((res.user && (res.user.role === 'HOD' || res.user.role === 'TEACHER')) ? '#/hod/dashboard' : '#/student/dashboard');
       await App.handleRoute();
     } catch (err) {
       Toast.error(err.message || 'Invalid email or password.');
