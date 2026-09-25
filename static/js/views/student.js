@@ -579,6 +579,105 @@ const StudentView = {
     return true;
   },
 
+  detectAndCropLetterbox(img) {
+    try {
+      const origW = img.naturalWidth || img.width || 0;
+      const origH = img.naturalHeight || img.height || 0;
+      if (!origW || !origH || origW < 60 || origH < 60) return null;
+
+      // Sample on a lightweight offscreen canvas for fast pixel detection
+      const sampleW = Math.min(320, origW);
+      const sampleH = Math.round((sampleW * origH) / origW);
+      if (sampleW <= 0 || sampleH <= 0) return null;
+
+      const testCanvas = document.createElement('canvas');
+      testCanvas.width = sampleW;
+      testCanvas.height = sampleH;
+      const testCtx = testCanvas.getContext('2d', { willReadFrequently: true });
+      if (!testCtx) return null;
+
+      testCtx.drawImage(img, 0, 0, sampleW, sampleH);
+      const imgData = testCtx.getImageData(0, 0, sampleW, sampleH).data;
+
+      const isDarkPixel = (x, y) => {
+        const idx = (y * sampleW + x) * 4;
+        const r = imgData[idx];
+        const g = imgData[idx + 1];
+        const b = imgData[idx + 2];
+        const a = imgData[idx + 3];
+        if (a < 30) return true; // Transparent padding
+        return r < 45 && g < 45 && b < 45;
+      };
+
+      const isDarkRow = (y) => {
+        let darkCount = 0;
+        const SAMPLES = 30;
+        for (let i = 0; i < SAMPLES; i++) {
+          const x = Math.floor((i * (sampleW - 1)) / (SAMPLES - 1));
+          if (isDarkPixel(x, y)) darkCount++;
+        }
+        return (darkCount / SAMPLES) >= 0.88;
+      };
+
+      const isDarkCol = (x) => {
+        let darkCount = 0;
+        const SAMPLES = 30;
+        for (let i = 0; i < SAMPLES; i++) {
+          const y = Math.floor((i * (sampleH - 1)) / (SAMPLES - 1));
+          if (isDarkPixel(x, y)) darkCount++;
+        }
+        return (darkCount / SAMPLES) >= 0.88;
+      };
+
+      let topRow = 0;
+      while (topRow < sampleH && isDarkRow(topRow)) topRow++;
+
+      let bottomRow = sampleH - 1;
+      while (bottomRow > topRow && isDarkRow(bottomRow)) bottomRow--;
+
+      let leftCol = 0;
+      while (leftCol < sampleW && isDarkCol(leftCol)) leftCol++;
+
+      let rightCol = sampleW - 1;
+      while (rightCol > leftCol && isDarkCol(rightCol)) rightCol--;
+
+      const topRatio = topRow / sampleH;
+      const bottomRatio = (sampleH - 1 - bottomRow) / sampleH;
+      const leftRatio = leftCol / sampleW;
+      const rightRatio = (sampleW - 1 - rightCol) / sampleW;
+
+      // Only crop if there is significant letterbox padding (> 5% on any side or > 8% combined)
+      const hasSignificantCrop = (topRatio > 0.05 || bottomRatio > 0.05 || leftRatio > 0.05 || rightRatio > 0.05 || (topRatio + bottomRatio > 0.08) || (leftRatio + rightRatio > 0.08));
+      if (!hasSignificantCrop) return null;
+
+      // Compute actual source crop rect with 4px safety breathing room
+      const sx = Math.max(0, Math.floor(leftRatio * origW) - 4);
+      const sy = Math.max(0, Math.floor(topRatio * origH) - 4);
+      const ex = Math.min(origW, Math.ceil((1 - rightRatio) * origW) + 4);
+      const ey = Math.min(origH, Math.ceil((1 - bottomRatio) * origH) + 4);
+      const sw = ex - sx;
+      const sh = ey - sy;
+
+      if (sw <= 50 || sh <= 50) return null;
+
+      const cropCanvas = document.createElement('canvas');
+      cropCanvas.width = sw;
+      cropCanvas.height = sh;
+      const cropCtx = cropCanvas.getContext('2d');
+      cropCtx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+
+      return {
+        dataUrl: cropCanvas.toDataURL('image/jpeg', 0.92),
+        cropBox: { sx, sy, sw, sh },
+        topRatio,
+        bottomRatio
+      };
+    } catch (e) {
+      console.warn('Letterbox detection fallback:', e);
+      return null;
+    }
+  },
+
   compressImageFile(file, callback) {
     if (!file) {
       callback('');
@@ -598,18 +697,31 @@ const StudentView = {
       return;
     }
 
-    // 2. High-Performance Instant Image Processing (Supports 20MB+ 4K/8K photos without memory lag)
+    // 2. High-Performance Instant Image Processing with Auto-Letterbox Trimming
     try {
       const objUrl = URL.createObjectURL(file);
       const img = new Image();
 
       img.onload = () => {
         try {
-          // High-clarity readable certificate dimensions (1000px max width/height)
-          const MAX_WIDTH = 1000;
-          const MAX_HEIGHT = 1000;
-          let width = img.width || 800;
-          let height = img.height || 600;
+          const origW = img.naturalWidth || img.width || 800;
+          const origH = img.naturalHeight || img.height || 600;
+
+          // Check if image contains letterbox padding (e.g. mobile screenshot of document)
+          let sx = 0, sy = 0, sw = origW, sh = origH;
+          const cropResult = this.detectAndCropLetterbox(img);
+          if (cropResult && cropResult.cropBox) {
+            sx = cropResult.cropBox.sx;
+            sy = cropResult.cropBox.sy;
+            sw = cropResult.cropBox.sw;
+            sh = cropResult.cropBox.sh;
+          }
+
+          // High-clarity readable certificate dimensions (1200px max width/height)
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = sw;
+          let height = sh;
 
           if (width > MAX_WIDTH || height > MAX_HEIGHT) {
             if (width > height) {
@@ -631,10 +743,10 @@ const StudentView = {
           // Fill white background for transparent PNGs
           ctx.fillStyle = '#FFFFFF';
           ctx.fillRect(0, 0, width, height);
-          ctx.drawImage(img, 0, 0, width, height);
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
 
-          // Export sharp 0.65 JPEG (~35KB) for crystal-clear text readability on HOD review desk
-          const compressed = canvas.toDataURL('image/jpeg', 0.65);
+          // Export sharp 0.72 JPEG (~45KB) for crystal-clear text readability on HOD review desk
+          const compressed = canvas.toDataURL('image/jpeg', 0.72);
           URL.revokeObjectURL(objUrl);
           callback(compressed && compressed.length > 50 ? compressed : '');
         } catch (e) {
@@ -947,7 +1059,99 @@ const StudentView = {
     `;
   },
 
+  _previewOriginalSrc: '',
+  _previewCroppedSrc: '',
+  _previewZoom: 1,
+  _previewRotation: 0,
+  _previewIsCropped: false,
+
+  handlePreviewImageLoad(img) {
+    if (!img) return;
+    if (this._previewCroppedSrc && img.src === this._previewCroppedSrc) return;
+
+    this._previewOriginalSrc = img.src;
+
+    // Detect and auto-crop letterbox borders if present
+    const cropResult = this.detectAndCropLetterbox(img);
+    if (cropResult && cropResult.dataUrl) {
+      this._previewCroppedSrc = cropResult.dataUrl;
+      this._previewIsCropped = true;
+      img.src = cropResult.dataUrl;
+
+      const badge = document.getElementById('preview-crop-badge');
+      if (badge) badge.style.display = 'inline-flex';
+      const toggleBtn = document.getElementById('btn-toggle-crop');
+      if (toggleBtn) {
+        toggleBtn.style.display = 'inline-block';
+        toggleBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Show Original';
+      }
+    }
+  },
+
+  togglePreviewCrop() {
+    const img = document.getElementById('preview-cert-img');
+    const badge = document.getElementById('preview-crop-badge');
+    const toggleBtn = document.getElementById('btn-toggle-crop');
+    if (!img || !this._previewCroppedSrc || !this._previewOriginalSrc) return;
+
+    if (this._previewIsCropped) {
+      img.src = this._previewOriginalSrc;
+      this._previewIsCropped = false;
+      if (badge) badge.style.display = 'none';
+      if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-expand"></i> Fit Full Shape';
+    } else {
+      img.src = this._previewCroppedSrc;
+      this._previewIsCropped = true;
+      if (badge) badge.style.display = 'inline-flex';
+      if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Show Original';
+    }
+  },
+
+  zoomPreview(delta) {
+    this._previewZoom = Math.min(3, Math.max(0.4, Number(((this._previewZoom || 1) + delta).toFixed(2))));
+    this.updatePreviewTransform();
+  },
+
+  resetPreviewZoom() {
+    this._previewZoom = 1;
+    this._previewRotation = 0;
+    this.updatePreviewTransform();
+  },
+
+  rotatePreview() {
+    this._previewRotation = ((this._previewRotation || 0) + 90) % 360;
+    this.updatePreviewTransform();
+  },
+
+  updatePreviewTransform() {
+    const img = document.getElementById('preview-cert-img');
+    const zoomLabel = document.getElementById('preview-zoom-label');
+    if (img) {
+      img.style.transform = `scale(${this._previewZoom || 1}) rotate(${this._previewRotation || 0}deg)`;
+    }
+    if (zoomLabel) {
+      zoomLabel.textContent = `${Math.round((this._previewZoom || 1) * 100)}%`;
+    }
+  },
+
+  openPreviewFullWindow() {
+    const img = document.getElementById('preview-cert-img');
+    const src = (img && img.src) || this._previewOriginalSrc || '';
+    if (!src) return;
+    const win = window.open();
+    if (win) {
+      win.document.write(`<!DOCTYPE html><html><head><title>Full Shape Certificate</title><style>body{margin:0;background:#020617;display:flex;align-items:center;justify-content:center;min-height:100vh;}img{max-width:98vw;max-height:98vh;object-fit:contain;box-shadow:0 0 30px rgba(0,0,0,0.8);}</style></head><body><img src="${src}"></body></html>`);
+      win.document.close();
+    }
+  },
+
   async previewFile(url, fileName, certTitle = '', studentName = '', certId = '') {
+    this._previewOriginalSrc = '';
+    this._previewCroppedSrc = '';
+    this._previewZoom = 1;
+    this._previewRotation = 0;
+    this._previewIsCropped = false;
+
     const titleText = fileName || certTitle || 'Activity Certificate Document';
     document.getElementById('preview-modal-title').innerText = `Certificate Document Preview: ${titleText}`;
     const body = document.getElementById('preview-modal-body');
@@ -989,11 +1193,46 @@ const StudentView = {
     let displayContent = '';
 
     if (fileUrl && (fileUrl.startsWith('data:image') || fileUrl.startsWith('http') || fileUrl.startsWith('blob:'))) {
+      const safeTitle = (titleText || 'Document').replace(/"/g, '&quot;');
       displayContent = `
-        <div style="text-align: center; width: 100%;">
-          <img src="${fileUrl}" style="max-width: 100%; max-height: 560px; border-radius: var(--radius-md); object-fit: contain; box-shadow: var(--shadow-md); border: 1px solid var(--border-color);" alt="${titleText}">
-          <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
-            <i class="fa-solid fa-file-image" style="color: var(--primary);"></i> Student Uploaded Document: ${titleText}
+        <div class="cert-preview-wrapper" style="width: 100%; display: flex; flex-direction: column;">
+          <!-- Top Viewer Action Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; background: #0f172a; padding: 0.55rem 0.85rem; border-radius: 8px 8px 0 0; color: #f8fafc; border: 1px solid #334155; border-bottom: 1px solid #1e293b;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 700;">
+              <i class="fa-solid fa-file-image" style="color: #38bdf8;"></i>
+              <span style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${safeTitle}">${safeTitle}</span>
+              <span id="preview-crop-badge" style="display: none; background: #059669; color: #ffffff; padding: 0.18rem 0.55rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 800; align-items: center; gap: 0.3rem;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Full Shape Fitted
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-sm" id="btn-toggle-crop" onclick="StudentView.togglePreviewCrop()" style="display: none; background: #1e293b; color: #f1f5f9; border: 1px solid #475569; font-size: 0.74rem; font-weight: 700; padding: 0.22rem 0.55rem; border-radius: 6px;">
+                <i class="fa-solid fa-arrows-rotate"></i> Show Original
+              </button>
+              <button type="button" class="btn btn-sm" onclick="StudentView.zoomPreview(-0.2)" style="background: #1e293b; color: #f1f5f9; border: 1px solid #475569; font-size: 0.74rem; padding: 0.22rem 0.5rem; border-radius: 6px;" title="Zoom Out">
+                <i class="fa-solid fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-sm" id="preview-zoom-label" onclick="StudentView.resetPreviewZoom()" style="background: #1e293b; color: #f1f5f9; border: 1px solid #475569; font-size: 0.74rem; font-weight: 800; padding: 0.22rem 0.5rem; border-radius: 6px; min-width: 46px;" title="Reset Zoom">
+                100%
+              </button>
+              <button type="button" class="btn btn-sm" onclick="StudentView.zoomPreview(0.2)" style="background: #1e293b; color: #f1f5f9; border: 1px solid #475569; font-size: 0.74rem; padding: 0.22rem 0.5rem; border-radius: 6px;" title="Zoom In">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+              <button type="button" class="btn btn-sm" onclick="StudentView.rotatePreview()" style="background: #1e293b; color: #f1f5f9; border: 1px solid #475569; font-size: 0.74rem; padding: 0.22rem 0.55rem; border-radius: 6px;" title="Rotate 90°">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+              <button type="button" class="btn btn-sm" onclick="StudentView.openPreviewFullWindow()" style="background: #2563eb; color: #ffffff; border: none; font-size: 0.74rem; font-weight: 700; padding: 0.22rem 0.6rem; border-radius: 6px;" title="Open full resolution in new window">
+                <i class="fa-solid fa-up-right-from-square"></i> Full
+              </button>
+            </div>
+          </div>
+
+          <!-- Document Stage Viewport -->
+          <div id="preview-stage-container" style="background: #020617; border-radius: 0 0 8px 8px; border: 1px solid #334155; border-top: none; min-height: 380px; max-height: 72vh; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 1rem; position: relative;">
+            <img id="preview-cert-img" src="${fileUrl}" onload="StudentView.handlePreviewImageLoad(this)" style="max-width: 100%; height: auto; max-height: 68vh; border-radius: 4px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7); transition: transform 0.15s ease-out; transform-origin: center center;" alt="${safeTitle}">
+          </div>
+          <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-align: center;">
+            <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i> Tip: Use Zoom (+ / -) or Rotate to inspect details. Auto-fit expands certificates to full shape.
           </div>
         </div>`;
     } else if (fileUrl && (fileUrl.includes('data:application/pdf') || fileUrl.endsWith('.pdf') || fileUrl === 'PDF_SUBMITTED')) {

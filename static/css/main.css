@@ -583,6 +583,24 @@ a:hover {
   color: var(--text-main);
 }
 
+#modal-file-preview .modal-content {
+  max-width: 1040px;
+  width: 95%;
+  padding: 1.5rem;
+}
+
+#preview-stage-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+#preview-stage-container::-webkit-scrollbar-track {
+  background: #090d16;
+}
+#preview-stage-container::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
 .modal-header {
   display: flex;
   align-items: center;
